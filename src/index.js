@@ -1,8 +1,11 @@
 import { Scene, Color, PerspectiveCamera, WebGLRenderer, AmbientLight, DirectionalLight, Mesh, BoxGeometry, MeshBasicMaterial } from 'three';
+import { Float32BufferAttribute, Uint16BufferAttribute, BufferGeometry, LineBasicMaterial, LineSegments, Group } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { createModel } from './commands.js';
 import ttm from './levels/ttm/index.js';
 import { CornerTable } from './topology/corner-table.js';
+import { arrayFill } from './topology/util.js';
+import { findSeams } from './find-seams.js';
 
 let scene, camera, renderer, controls;
 // let cube;
@@ -13,6 +16,23 @@ let playbackSpeed = 1;
 
 init();
 let frame = requestAnimationFrame(animate);
+
+function createLineMesh(vertices, indices, color) {
+  const geometry = new BufferGeometry();
+  geometry.setAttribute('position', new Float32BufferAttribute(vertices, 3));
+  geometry.setIndex(new Uint16BufferAttribute(indices, 1));
+
+  const material = new LineBasicMaterial({ color });
+
+  return new LineSegments(geometry, material);
+}
+
+function createEdgesGroup(data) {
+  const group = new Group();
+  group.add(createLineMesh(data.vertices, data.edges, '#404040'));
+  group.add(createLineMesh(data.vertices, data.seams, 'orange'));
+  return group;
+}
 
 function init() {
   scene = new Scene();
@@ -26,18 +46,20 @@ function init() {
   controls = new OrbitControls(camera, renderer.domElement);
 
   const model = createModel(ttm[0]);
-  const geometry = model.createGeometry();
-  geometry.deduplicateAttributeValues();
-  geometry.deduplicateVertices();
+  // const geometry = model.createGeometry();
+  // geometry.deduplicateAttributeValues();
+  // geometry.deduplicateVertices();
+  //
+  // const posIndex = geometry.getPositionConnectivity();
+  // const cornerTable = new CornerTable();
+  // cornerTable.init(posIndex);
 
-  const posIndex = geometry.getPositionConnectivity();
-  const cornerTable = new CornerTable();
-  cornerTable.init(posIndex);
-
-  console.log(cornerTable);
+  const result = findSeams(model);
+  const group = createEdgesGroup(result);
+  scene.add(group);
 
 
-  ttm.forEach(commands => scene.add(createModel(commands).buildGfx()));
+  // ttm.forEach(commands => scene.add(createModel(commands).buildGfx()));
 
   const ambient = new AmbientLight(0xffffff, 0.3);
   const light = new DirectionalLight(0xffffff, 1.2);

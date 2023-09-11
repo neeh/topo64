@@ -1,5 +1,7 @@
 import { arrayCopy, arrayFill, arrayMax } from './util.js';
 
+let DEV = true;
+
 // Taken from Google Draco 3D Mesh Compression lib.
 // See https://github.com/google/draco/blob/master/src/draco/mesh/corner_table.h
 //
@@ -58,7 +60,7 @@ export class CornerTable {
     arrayCopy(faces, this.cornerToVertex);
     this.computeOppositeCorners();
     // this.breakNonManifoldEdges();
-    this.computeVertexCorners();
+    // this.computeVertexCorners();
   }
 
   numVertices() {
@@ -537,7 +539,7 @@ export class CornerTable {
             if (attachedSinkVertexFirst === sinkVertex) {
               // Sink vertex has already been processed.
               const otherEdgeCorner = attachedSinkVertexSecond;
-              if (__DEBUG__ && edgeCorner === -1) throw new Error('Invalid edgeCorner');
+              if (DEV && edgeCorner === -1) throw new Error('Invalid edgeCorner');
               const oppEdgeCorner = this.oppositeCorner[edgeCorner];
 
               if (oppEdgeCorner === otherEdgeCorner) {
@@ -548,7 +550,7 @@ export class CornerTable {
               // Break the connectivity on the non-manifold edge.
               // TODO(ostava): It may be possible to reconnect the faces in a way
               // that the final surface would be manifold.
-              if (__DEBUG__ && otherEdgeCorner === -1) throw new Error('Invalid otherEdgeCorner');
+              if (DEV && otherEdgeCorner === -1) throw new Error('Invalid otherEdgeCorner');
               const oppOtherEdgeCorner = this.oppositeCorner[otherEdgeCorner];
               if (oppEdgeCorner !== -1) {
                 this.oppositeCorner[oppEdgeCorner] = -1;

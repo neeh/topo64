@@ -37,9 +37,9 @@ export class CollisionModel {
       geometry.setIndex(new BufferAttribute(indices, 1));
       geometry.computeVertexNormals();
 
-      const material = new MeshMatcapMaterial({
+      const material = new MeshBasicMaterial({
         color: SurfaceColors[batch.type],
-        // wireframe: true
+        wireframe: true
       });
 
       group.add(new Mesh(geometry, material));
