@@ -1,0 +1,22 @@
+{
+  "name": "sm64-seam-finder",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "rollup -c -w -m",
+    "dev:open": "rollup -c -w -m --environment OPEN",
+    "build": "rollup -c --environment PROD"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.1",
+    "http-server": "^14.1.1",
+    "opener": "^1.5.2",
+    "rollup": "^3.29.1",
+    "three": "^0.156.1"
+  }
+}
