@@ -2,6 +2,7 @@ import { Scene, Color, PerspectiveCamera, WebGLRenderer, AmbientLight, Direction
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { createModel } from './commands.js';
 import ttm from './levels/ttm/index.js';
+import { CornerTable } from './topology/corner-table.js';
 
 let scene, camera, renderer, controls;
 // let cube;
@@ -23,6 +24,18 @@ function init() {
   renderer = new WebGLRenderer();
 
   controls = new OrbitControls(camera, renderer.domElement);
+
+  const model = createModel(ttm[0]);
+  const geometry = model.createGeometry();
+  geometry.deduplicateAttributeValues();
+  geometry.deduplicateVertices();
+
+  const posIndex = geometry.getPositionConnectivity();
+  const cornerTable = new CornerTable();
+  cornerTable.init(posIndex);
+
+  console.log(cornerTable);
+
 
   ttm.forEach(commands => scene.add(createModel(commands).buildGfx()));
 

@@ -1,4 +1,4 @@
-import { arrayCopy, arrayMax } from './util.js';
+import { arrayCopy, arrayFill, arrayMax } from './util.js';
 
 // Taken from Google Draco 3D Mesh Compression lib.
 // See https://github.com/google/draco/blob/master/src/draco/mesh/corner_table.h
@@ -47,8 +47,8 @@ export class CornerTable {
   }
 
   initEmpty(numFaces) {
-    arraySet(this.cornerToVertex, -1, numFaces * 3);
-    arraySet(this.oppositeCorner, -1, numFaces * 3);
+    arrayFill(this.cornerToVertex, -1, numFaces * 3);
+    arrayFill(this.oppositeCorner, -1, numFaces * 3);
   }
 
   // Initializes the CornerTable from provides set of indexed faces.
@@ -57,7 +57,7 @@ export class CornerTable {
   init(faces) {
     arrayCopy(faces, this.cornerToVertex);
     this.computeOppositeCorners();
-    this.breakNonManifoldEdges();
+    // this.breakNonManifoldEdges();
     this.computeVertexCorners();
   }
 
@@ -360,13 +360,13 @@ export class CornerTable {
     const numCorners = this.cornerToVertex.length;
     const numVertices = arrayMax(this.cornerToVertex) + 1;
 
-    arraySet(this.oppositeCorner, -1, numCorners);
+    arrayFill(this.oppositeCorner, -1, numCorners);
 
     // First compute the number of outgoing half-edges (corners) attached to each
     // vertex. For each corner there is always exactly one outgoing half-edge attached
     // to its vertex.
     const numCornersPerVertex = [];
-    arraySet(numCornersPerVertex, 0, numVertices);
+    arrayFill(numCornersPerVertex, 0, numVertices);
     for (let i = 0; i < numCorners; ++i) {
       numCornersPerVertex[this.cornerToVertex[i]]++;
     }
@@ -379,8 +379,8 @@ export class CornerTable {
     // with |sink_vert| == kInvalidVertexIndex.
     const vertexEdgeSink = [];
     const vertexEdgeCorner = [];
-    arraySet(vertexEdgeSink, -1, numCorners);
-    arraySet(vertexEdgeCorner, -1, numCorners);
+    arrayFill(vertexEdgeSink, -1, numCorners);
+    arrayFill(vertexEdgeCorner, -1, numCorners);
 
     // For each vertex compute the offset (location where the first half-edge
     // entry of a given vertex is going to be stored). This way each vertex is
@@ -487,7 +487,7 @@ export class CornerTable {
     const numCorners = this.cornerToVertex.length;
 
     const visitedCorners = [];
-    arraySet(visitedCorners, false, numCorners);
+    arrayFill(visitedCorners, false, numCorners);
     let sinkVerticesLength = 0;
     const sinkVerticesFirst = [];
     const sinkVerticesSecond = [];
@@ -594,14 +594,14 @@ export class CornerTable {
     let numVertices = arrayMax(this.cornerToVertex) + 1;
 
     this.originalVertexCount = numVertices;
-    arraySet(this.vertexCorners, -1, numVertices);
+    arrayFill(this.vertexCorners, -1, numVertices);
 
     // Arrays for marking visited vertices and corners that allow us to detect
     // non-manifold vertices.
     const visitedVertices = [];
     const visitedCorners = [];
-    arraySet(visitedVertices, false, numVertices);
-    arraySet(visitedCorners, false, numCorners);
+    arrayFill(visitedVertices, false, numVertices);
+    arrayFill(visitedCorners, false, numCorners);
 
     const il = this.cornerToVertex.length / 3 | 0;
     for (let i = 0; i < il; ++i) {
