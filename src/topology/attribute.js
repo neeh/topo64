@@ -114,8 +114,9 @@ export class Attribute {
   }
 
   appendLinearIndex(valueId, count) {
-    const il = i + count;
-    for (let i = this.index.length; i < il; ++i, ++valueId) {
+    const numItems = this.index.length;
+    const il = numItems + count;
+    for (let i = numItems; i < il; ++i, ++valueId) {
       this.index[i] = valueId;
     }
   }
@@ -127,8 +128,9 @@ export class Attribute {
   }
 
   appendConstantIndex(valueId = 0, count = 1) {
-    const il = i + count;
-    for (let i = this.index.length; i < il; ++i) {
+    const numItems = this.index.length;
+    const il = numItems + count;
+    for (let i = numItems; i < il; ++i) {
       this.index[i] = valueId;
     }
   }

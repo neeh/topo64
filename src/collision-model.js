@@ -1,5 +1,6 @@
 import { Group, BufferAttribute, BufferGeometry, MeshBasicMaterial, MeshPhongMaterial, MeshMatcapMaterial, Mesh } from 'three';
 import { SurfaceColors } from './surface-terrains.js';
+import { Geometry } from './topology/geometry.js';
 
 export class CollisionModel {
   constructor() {
@@ -49,5 +50,37 @@ export class CollisionModel {
     // }
 
     return group;
+  }
+
+  createGeometry(geometry) {
+    if (!geometry) {
+      geometry = new Geometry();
+      geometry.createAttribute(0, 6, 3);
+    }
+    const posAttribute = geometry.posAttribute;
+
+    const vertexId = geometry.numVertices;
+
+    const positions = [];
+    for (let i = 0, j = 0; i < this.vertices.length; ++i, j += 3) {
+      const vertex = this.vertices[i];
+      positions[j] = vertex[0];
+      positions[j + 1] = vertex[1];
+      positions[j + 2] = vertex[2];
+    }
+    posAttribute.appendVertices(positions);
+
+    const indices = [];
+    for (const batch of this.batches) {
+      const { tris } = batch;
+      for (let i = 0, ofs = 0; i < tris.length; ++i, ofs += 3) {
+        const tri = tris[i];
+        indices.push(tri[0], tri[1], tri[2]);
+      }
+    }
+    geometry.appendIndex(indices);
+
+    geometry.numVertices += this.vertices.length;
+    return geometry;
   }
 }

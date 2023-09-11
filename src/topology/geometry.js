@@ -16,6 +16,11 @@ export class Geometry {
     return this.attributes.length;
   }
 
+  createAttribute(type, dataType, itemSize) {
+    const attribute = new Attribute(type, dataType, itemSize);
+    this.addAttribute(attribute);
+  }
+
   addAttribute(attribute) {
     if (attribute.type === Attribute.POSITION) {
       if (this.posAttribute) {
