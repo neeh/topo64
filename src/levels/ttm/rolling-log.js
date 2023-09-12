@@ -20,7 +20,7 @@ export function ttm_seg7_collision_pitoune_2() {
   COL_VERTEX(-1104, -97, -236);
   COL_VERTEX(-1104, 98, -235);
   COL_VERTEX(-1104, 236, 98);
-  COL_TRI_INIT(SurfaceType.DEFAULT, 12);
+  COL_TRI_INIT(SURFACE_DEFAULT, 12);
   COL_TRI(8, 14, 13);
   COL_TRI(0, 1, 2);
   COL_TRI(0, 2, 3);
@@ -33,7 +33,7 @@ export function ttm_seg7_collision_pitoune_2() {
   COL_TRI(8, 12, 11);
   COL_TRI(8, 13, 12);
   COL_TRI(8, 10, 15);
-  COL_TRI_INIT(SurfaceType.NOT_SLIPPERY, 16);
+  COL_TRI_INIT(SURFACE_NOT_SLIPPERY, 16);
   COL_TRI(9, 5, 10);
   COL_TRI(14, 2, 13);
   COL_TRI(14, 3, 2);

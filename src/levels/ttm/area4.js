@@ -1,5 +1,3 @@
-import { COL_INIT, COL_VERTEX_INIT, COL_VERTEX, COL_TRI_INIT, COL_TRI, COL_TRI_SPECIAL, COL_TRI_STOP, COL_SPECIAL_INIT, SPECIAL_OBJECT_WITH_YAW, COL_WATER_BOX_INIT, COL_WATER_BOX, COL_END } from '../../commands.js';
-import { SurfaceType } from '../../surface-terrains.js';
 
 export function ttm_seg7_area_4_collision() {
   COL_INIT();
@@ -259,7 +257,7 @@ export function ttm_seg7_area_4_collision() {
   COL_VERTEX(3058, 5251, 615);
   COL_VERTEX(7051, 2691, 2459);
   COL_VERTEX(7256, 2640, 2049);
-  COL_TRI_INIT(SurfaceType.DEFAULT, 425);
+  COL_TRI_INIT(SURFACE_DEFAULT, 425);
   COL_TRI(16, 17, 18);
   COL_TRI(16, 18, 19);
   COL_TRI(17, 16, 20);
@@ -685,17 +683,17 @@ export function ttm_seg7_area_4_collision() {
   COL_TRI(77, 216, 235);
   COL_TRI(40, 70, 74);
   COL_TRI(41, 40, 74);
-  COL_TRI_INIT(SurfaceType.DEATH_PLANE, 2);
+  COL_TRI_INIT(SURFACE_DEATH_PLANE, 2);
   COL_TRI(8, 9, 10);
   COL_TRI(8, 11, 9);
-  COL_TRI_INIT(SurfaceType.INSTANT_WARP_1E, 6);
+  COL_TRI_INIT(SURFACE_INSTANT_WARP_1E, 6);
   COL_TRI(0, 1, 2);
   COL_TRI(1, 3, 2);
   COL_TRI(4, 0, 2);
   COL_TRI(5, 4, 2);
   COL_TRI(6, 4, 5);
   COL_TRI(6, 7, 4);
-  COL_TRI_INIT(SurfaceType.NO_CAM_COL_SLIPPERY, 2);
+  COL_TRI_INIT(SURFACE_NO_CAM_COL_SLIPPERY, 2);
   COL_TRI(12, 13, 14);
   COL_TRI(12, 15, 13);
   COL_TRI_STOP();

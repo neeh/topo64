@@ -134,17 +134,42 @@ export function COL_SPECIAL_INIT(count) {
   specialObjCount = count;
 }
 
-export function SPECIAL_OBJECT_WITH_YAW(name, x, y, z, yaw) {
+
+export function SPECIAL_OBJECT_internal(name, x, y, z, yaw = 0, param = 0) {
   if (!curModel) {
-    throw new Error('SPECIAL_OBJECT_WITH_YAW: no model to output to');
+    throw new Error('no model to output to');
   }
   if (!isInit) {
-    throw new Error('SPECIAL_OBJECT_WITH_YAW: not initialized');
+    throw new Error('not initialized');
   }
   if (curModel.specialObjs.length >= specialObjCount) {
-    throw new Error('SPECIAL_OBJECT_WITH_YAW: cannot add more special objects');
+    throw new Error('cannot add more special objects');
   }
-  curModel.specialObjs.push({ name, pos: [x, y, z], yaw });
+  curModel.specialObjs.push({ name, pos: [x, y, z], yaw, param });
+}
+
+export function SPECIAL_OBJECT(name, x, y, z) {
+  try {
+    SPECIAL_OBJECT_internal(name, x, y, z);
+  } catch (err) {
+    throw new Error('SPECIAL_OBJECT: ' + err);
+  }
+}
+
+export function SPECIAL_OBJECT_WITH_YAW(name, x, y, z, yaw) {
+  try {
+    SPECIAL_OBJECT_internal(name, x, y, z, yaw);
+  } catch (err) {
+    throw new Error('SPECIAL_OBJECT_WITH_YAW: ' + err);
+  }
+}
+
+export function SPECIAL_OBJECT_WITH_YAW_AND_PARAM(name, x, y, z, yaw, param) {
+  try {
+    SPECIAL_OBJECT_internal(name, x, y, z, yaw, param);
+  } catch (err) {
+    throw new Error('SPECIAL_OBJECT_WITH_YAW_AND_PARAM: ' + err);
+  }
 }
 
 export function COL_WATER_BOX_INIT(count) {
@@ -190,6 +215,28 @@ export function COL_END() {
     throw new Error('COL_END: missing some special objects');
   }
   resetInternal();
+}
+
+const commands = {
+  COL_INIT,
+  COL_VERTEX_INIT,
+  COL_VERTEX,
+  COL_TRI_INIT,
+  COL_TRI,
+  COL_TRI_SPECIAL,
+  COL_TRI_STOP,
+  COL_SPECIAL_INIT,
+  SPECIAL_OBJECT,
+  SPECIAL_OBJECT_WITH_YAW,
+  SPECIAL_OBJECT_WITH_YAW_AND_PARAM,
+  COL_WATER_BOX_INIT,
+  COL_WATER_BOX,
+  COL_END,
+};
+
+const global = window;
+for (const name in commands) {
+  global[name] = commands[name];
 }
 
 export function createModel(commandsWrap) {

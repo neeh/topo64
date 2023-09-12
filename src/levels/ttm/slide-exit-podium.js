@@ -34,7 +34,7 @@ export function ttm_seg7_collision_podium_warp() {
   COL_VERTEX(205, 0, -204);
   COL_VERTEX(-101, 0, 102);
   COL_VERTEX(102, 205, 102);
-  COL_TRI_INIT(SurfaceType.DEFAULT, 34);
+  COL_TRI_INIT(SURFACE_DEFAULT, 34);
   COL_TRI(10, 9, 7);
   COL_TRI(0, 1, 2);
   COL_TRI(3, 4, 5);
