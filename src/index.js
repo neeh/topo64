@@ -2,7 +2,7 @@ import { Scene, Color, PerspectiveCamera, WebGLRenderer, AmbientLight, Direction
 import { Float32BufferAttribute, Uint16BufferAttribute, BufferGeometry, LineBasicMaterial, LineSegments, AdditiveBlending, Group } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { createModel } from './commands.js';
-import ttm from './levels/ttm/index.js';
+import levels from './levels/index.js';
 import { CornerTable } from './topology/corner-table.js';
 import { arrayFill } from './topology/util.js';
 import { computeEdges } from './edge.js';
@@ -91,7 +91,7 @@ function init() {
   controls = new OrbitControls(camera, renderer.domElement);
 
 
-  const model = createModel(ttm[0]);
+  const model = createModel(levels.sa[0]);
   // scene.add(model.buildGfx());
   // const geometry = model.createGeometry();
   // geometry.deduplicateAttributeValues();
