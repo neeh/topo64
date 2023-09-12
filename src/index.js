@@ -1,5 +1,5 @@
 import { Scene, Color, PerspectiveCamera, WebGLRenderer, AmbientLight, DirectionalLight, Mesh, BoxGeometry, MeshBasicMaterial } from 'three';
-import { Float32BufferAttribute, Uint16BufferAttribute, BufferGeometry, LineBasicMaterial, LineSegments, Group } from 'three';
+import { Float32BufferAttribute, Uint16BufferAttribute, BufferGeometry, LineBasicMaterial, LineSegments, AdditiveBlending, Group } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { createModel } from './commands.js';
 import ttm from './levels/ttm/index.js';
@@ -22,14 +22,34 @@ function createLineMesh(vertices, indices, color) {
   geometry.setAttribute('position', new Float32BufferAttribute(vertices, 3));
   geometry.setIndex(new Uint16BufferAttribute(indices, 1));
 
-  const material = new LineBasicMaterial({ color });
+  const material = new LineBasicMaterial({
+    depthTest: false,
+    depthWrite: false,
+    color
+  });
 
   return new LineSegments(geometry, material);
 }
 
+function createTriMesh(vertices, indices, color) {
+  const geometry = new BufferGeometry();
+  geometry.setAttribute('position', new Float32BufferAttribute(vertices, 3));
+  geometry.setIndex(new Uint16BufferAttribute(indices, 1));
+
+  const material = new MeshBasicMaterial({
+    blending: AdditiveBlending,
+    depthTest: false,
+    depthWrite: false,
+    color
+  });
+
+  return new Mesh(geometry, material);
+}
+
 function createEdgesGroup(data) {
   const group = new Group();
-  group.add(createLineMesh(data.vertices, data.edges, '#404040'));
+  group.add(createTriMesh(data.vertices, data.faces, '#060608'));
+  group.add(createLineMesh(data.vertices, data.edges, '#404244'));
   group.add(createLineMesh(data.vertices, data.seams, 'orange'));
   return group;
 }
@@ -45,7 +65,9 @@ function init() {
 
   controls = new OrbitControls(camera, renderer.domElement);
 
+
   const model = createModel(ttm[0]);
+  // scene.add(model.buildGfx());
   // const geometry = model.createGeometry();
   // geometry.deduplicateAttributeValues();
   // geometry.deduplicateVertices();
@@ -59,7 +81,10 @@ function init() {
   scene.add(group);
 
 
+
   // ttm.forEach(commands => scene.add(createModel(commands).buildGfx()));
+
+  // scene.add(createModel(ttm[0]).buildGfx());
 
   const ambient = new AmbientLight(0xffffff, 0.3);
   const light = new DirectionalLight(0xffffff, 1.2);
