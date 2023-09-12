@@ -116,11 +116,11 @@ class GeometryUtil {
 
       const normal = this.normals[i];
       const oppNormal = this.normals[oppFaceId];
-      if (normal.dot(oppNormal) > 0.5) continue;
+      if (normal.dot(oppNormal) > 0.2) continue;
 
       const area = this.triangles[i].getArea();
       const height = 2 * area / base;
-      if (height / base > 0.1) continue;
+      if (height / base > 0.075) continue;
 
       for (let k = 0; k < 3; ++k) {
         if (k === baseId) continue;

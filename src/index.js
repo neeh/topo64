@@ -62,10 +62,10 @@ function computeRenderInfo(geometry, edges) {
 
   for (const edge of edges) {
     let indices = indEdges;
-    if (edge.isMisaligned) {
-      indices = indMisaligned;
-    } else if (edge.isSeam) {
+    if (edge.isSeam) {
       indices = indSeams;
+    } else if (edge.isMisaligned) {
+      indices = indMisaligned;
     }
     indices.push(edge.p0, edge.p1);
   }
