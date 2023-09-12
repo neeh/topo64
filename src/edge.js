@@ -3,9 +3,12 @@ import { CornerTable } from './topology/corner-table.js';
 import { arrayFill } from './topology/util.js';
 
 class Edge {
-  constructor(p0, p1) {
+  constructor(p0, p1, faceId = -1) {
     this.p0 = p0;
     this.p1 = p1;
+    // We store the face index so that we don't
+    // test the edge against its own face
+    this.faceId = faceId;
 
     this.length = 0;
 
