@@ -1,4 +1,4 @@
-import { Group, BufferAttribute, BufferGeometry, MeshBasicMaterial, MeshPhongMaterial, MeshMatcapMaterial, Mesh } from 'three';
+import { Group, BufferAttribute, BufferGeometry, MeshBasicMaterial, MeshPhongMaterial, MeshMatcapMaterial, Mesh, EdgesGeometry, LineSegments, LineBasicMaterial, Color, AdditiveBlending } from 'three';
 import { SurfaceColors } from './surface-terrains.js';
 import { Geometry } from './topology/geometry.js';
 
@@ -37,12 +37,18 @@ export class CollisionModel {
       geometry.setIndex(new BufferAttribute(indices, 1));
       geometry.computeVertexNormals();
 
+      const color = new Color(SurfaceColors[batch.type]).multiplyScalar(0.01);
+
       const material = new MeshBasicMaterial({
-        color: SurfaceColors[batch.type],
-        wireframe: true
+        blending: AdditiveBlending,
+        depthTest: false,
+        depthWrite: false,
+        color,
+        // wireframe: true
       });
 
       group.add(new Mesh(geometry, material));
+      // group.add(new LineSegments(new EdgesGeometry(geometry), new LineBasicMaterial({ color: 'white' })));
     }
 
     // for (const waterBox of this.waterboxes) {

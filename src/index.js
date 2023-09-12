@@ -5,7 +5,7 @@ import { createModel } from './commands.js';
 import ttm from './levels/ttm/index.js';
 import { CornerTable } from './topology/corner-table.js';
 import { arrayFill } from './topology/util.js';
-import { findSeams } from './find-seams.js';
+import { computeEdges } from './edge.js';
 
 let scene, camera, renderer, controls;
 // let cube;
@@ -46,12 +46,37 @@ function createTriMesh(vertices, indices, color) {
   return new Mesh(geometry, material);
 }
 
-function createEdgesGroup(data) {
+function createRenderNode(data) {
   const group = new Group();
   group.add(createTriMesh(data.vertices, data.faces, '#060608'));
   group.add(createLineMesh(data.vertices, data.edges, '#404244'));
   group.add(createLineMesh(data.vertices, data.seams, 'orange'));
+  group.add(createLineMesh(data.vertices, data.misaligned, 'red'));
   return group;
+}
+
+function computeRenderInfo(geometry, edges) {
+  const indEdges = [];
+  const indSeams = [];
+  const indMisaligned = [];
+
+  for (const edge of edges) {
+    let indices = indEdges;
+    if (edge.isMisaligned) {
+      indices = indMisaligned;
+    } else if (edge.isSeam) {
+      indices = indSeams;
+    }
+    indices.push(edge.p0, edge.p1);
+  }
+
+  return {
+    vertices: geometry.posAttribute.values,
+    faces: geometry.getPositionConnectivity(),
+    edges: indEdges,
+    seams: indSeams,
+    misaligned: indMisaligned
+  };
 }
 
 function init() {
@@ -76,8 +101,10 @@ function init() {
   // const cornerTable = new CornerTable();
   // cornerTable.init(posIndex);
 
-  const result = findSeams(model);
-  const group = createEdgesGroup(result);
+  const geometry = model.createGeometry();
+  const edges = computeEdges(geometry);
+  const renderInfo = computeRenderInfo(geometry, edges);
+  const group = createRenderNode(renderInfo);
   scene.add(group);
 
 

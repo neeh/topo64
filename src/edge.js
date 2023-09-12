@@ -47,9 +47,9 @@ class GeometryUtil {
     this.triangles.length = 0;
     this.normals.length = 0;
     for (let i = 0, j = 0; i < numTriangles; i++, j += 3) {
-      const a = this.vertices[j];
-      const b = this.vertices[j + 1];
-      const c = this.vertices[j + 2];
+      const a = this.vertices[indices[j]];
+      const b = this.vertices[indices[j + 1]];
+      const c = this.vertices[indices[j + 2]];
       this.triangles[i] = new Triangle(a, b, c);
 
       this.normals[i] = new Vector3();
@@ -63,7 +63,7 @@ class GeometryUtil {
     this.edges.length = 0;
     arrayFill(this.cornerToEdge, null, indices.length, true);
     for (let i = 0; i < indices.length; ++i) {
-      if (this.cornerToEdge[i] === null) return;
+      if (this.cornerToEdge[i] !== null) continue;
 
       const oppCornerId = oppositeCorner[i];
 
@@ -96,8 +96,8 @@ class GeometryUtil {
       const abEdge = this.cornerToEdge[j + 2];
 
       const bc = bcEdge.length;
-      const ca = bcEdge.length;
-      const ab = bcEdge.length;
+      const ca = caEdge.length;
+      const ab = abEdge.length;
 
       let base = bc;
       let baseId = 0;
@@ -142,6 +142,6 @@ class GeometryUtil {
 export function computeEdges(geometry) {
   const geoUtil = new GeometryUtil(geometry);
   geoUtil.init();
-  // geoUtil.markMisalignedEdges();
+  geoUtil.markMisalignedEdges();
   return geoUtil.edges;
 }
