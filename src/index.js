@@ -91,7 +91,7 @@ function init() {
   controls = new OrbitControls(camera, renderer.domElement);
 
 
-  const model = createModel(levels.sa[0]);
+  const model = createModel(levels.castle_courtyard[0]);
   // scene.add(model.buildGfx());
   // const geometry = model.createGeometry();
   // geometry.deduplicateAttributeValues();
