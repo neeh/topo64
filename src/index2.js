@@ -3,7 +3,6 @@ import { BoxGeometry, BufferGeometry, Float32BufferAttribute, MeshBasicMaterial,
 import { Vector3, Plane, Triangle, Line3 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { Edge, GeometryData } from './geometry-data.js';
-import { IntervalSet } from './interval-set.js';
 
 let scene, camera, renderer, controls;
 // let cube;
@@ -12,39 +11,10 @@ let lastTime = 0;
 let globalTime = 0;
 let playbackSpeed = 1;
 
-// function createLineMesh(vertices, indices, color) {
-//   const geometry = new BufferGeometry();
-//   geometry.setAttribute('position', new Float32BufferAttribute(vertices, 3));
-//   geometry.setIndex(new Uint16BufferAttribute(indices, 1));
-//
-//   const material = new LineBasicMaterial({
-//     depthTest: false,
-//     depthWrite: false,
-//     color
-//   });
-//
-//   return new LineSegments(geometry, material);
-// }
-//
-// function createTriMesh(vertices, indices, color) {
-//   const geometry = new BufferGeometry();
-//   geometry.setAttribute('position', new Float32BufferAttribute(vertices, 3));
-//   geometry.setIndex(new Uint16BufferAttribute(indices, 1));
-//
-//   const material = new MeshBasicMaterial({
-//     blending: AdditiveBlending,
-//     depthTest: false,
-//     depthWrite: false,
-//     color
-//   });
-//
-//   return new Mesh(geometry, material);
-// }
-
 const tmp_ = new Vector3();
 const tmp2_ = new Vector3();
 
-function createTriangleMesh(triangles) {
+function createTriangleMesh(triangles, color) {
   const vertices = [];
   for (const triangle of triangles) {
     triangle.a.toArray(vertices, vertices.length);
@@ -59,13 +29,13 @@ function createTriangleMesh(triangles) {
     blending: AdditiveBlending,
     depthTest: false,
     depthWrite: false,
-    color: '#202124'
+    color
   });
 
   return new Mesh(geometry, material);
 }
 
-function createLineMesh(lines) {
+function createLineMesh(lines, color) {
   const vertices = [];
   for (const line of lines) {
     line.start.toArray(vertices, vertices.length);
@@ -85,7 +55,7 @@ function createLineMesh(lines) {
   return new LineSegments(geometry, material);
 }
 
-function createEdgeMesh(edges) {
+function createEdgeMesh(edges, color) {
   const vertices = [];
 
   for (const edge of edges) {
@@ -95,13 +65,13 @@ function createEdgeMesh(edges) {
   // TODO
 }
 
-function createMisalignedEdgeMesh(edges) {
+function createMisalignedEdgeMesh(edges, color) {
   const vertices = [];
   for (const edge of edges) {
     const { p0, p1 } = edge;
     tmp_.subVectors(p1, p0);
 
-    const t = edge.alignedSections.getInverse();
+    const t = edge.misalignedSections.bounds;
     for (let i = 0; i < t.length; ++i) {
       tmp2_.copy(p0).addScaledVector(tmp_, t[i]).toArray(vertices, vertices.length);
     }
@@ -110,10 +80,7 @@ function createMisalignedEdgeMesh(edges) {
   const geometry = new BufferGeometry();
   geometry.setAttribute('position', new Float32BufferAttribute(vertices, 3));
 
-  const material = new LineBasicMaterial({
-    linewidth: 3,
-    color: 'yellow'
-  });
+  const material = new LineBasicMaterial({ color });
 
   return new LineSegments(geometry, material);
 }
@@ -129,12 +96,6 @@ function init() {
   renderer = new WebGLRenderer();
 
   controls = new OrbitControls(camera, renderer.domElement);
-
-  const is = new IntervalSet();
-  is.add(7, 11);
-  is.add(16, 22);
-  is.add(2, 4);
-  console.log(is);
 
   const seam = new Line3(
     new Vector3(-20, 0, 0),
@@ -180,20 +141,22 @@ function init() {
   // Collision
   const geometryData = new GeometryData();
   const triangles = [t1, t2, t3, t4, t5, t6];
-  triangles.forEach(tri => geometryData.addTriangle(tri));
+  triangles.forEach(tri => geometryData.addTriangle(tri.a, tri.b, tri.c));
 
   const seamEdge = new Edge(seam.start, seam.end);
+  seamEdge.markSeam();
 
-  geometryData.findMisalignedSeamSections(seamEdge);
+  geometryData.edges.push(seamEdge);
+  geometryData.findMisalignedSeamSections();
 
   // Rendering
-  const triMesh = createTriangleMesh(triangles);
+  const triMesh = createTriangleMesh(triangles, '#08080A');
   scene.add(triMesh);
 
   const lineMesh = createLineMesh([seam]);
   scene.add(lineMesh);
 
-  const misalignedEdgesMesh = createMisalignedEdgeMesh([seamEdge]);
+  const misalignedEdgesMesh = createMisalignedEdgeMesh([seamEdge], 'yellow');
   scene.add(misalignedEdgesMesh);
 
   // cube = new Mesh(
