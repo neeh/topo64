@@ -234,9 +234,51 @@ const commands = {
   COL_END,
 };
 
+const specialObjNames = [
+  'special_0stars_door',
+  'special_1star_door',
+  'special_3star_door',
+  'special_bowser',
+  'special_bubble_tree',
+  'special_castle_door_warp',
+  'special_haunted_door',
+  'special_hmc_door',
+  'special_level_geo_03',
+  'special_level_geo_04',
+  'special_level_geo_05',
+  'special_level_geo_06',
+  'special_level_geo_07',
+  'special_level_geo_08',
+  'special_level_geo_09',
+  'special_level_geo_0A',
+  'special_level_geo_0B',
+  'special_level_geo_0C',
+  'special_level_geo_0D',
+  'special_level_geo_0E',
+  'special_level_geo_0F',
+  'special_level_geo_10',
+  'special_level_geo_11',
+  'special_level_geo_12',
+  'special_level_geo_13',
+  'special_level_geo_14',
+  'special_level_geo_15',
+  'special_level_geo_16',
+  'special_metal_door',
+  'special_metal_door_warp',
+  'special_mine',
+  'special_null_start',
+  'special_snow_tree',
+  'special_spiky_tree',
+  'special_wooden_door',
+  'special_wooden_door_warp',
+];
+
 const global = window;
 for (const name in commands) {
   global[name] = commands[name];
+}
+for (const name of specialObjNames) {
+  global[name] = name;
 }
 
 export function createModel(commandsWrap) {

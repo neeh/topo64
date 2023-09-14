@@ -3,7 +3,7 @@ import { CornerTable } from './topology/corner-table.js';
 import { arrayFill } from './topology/util.js';
 import { Edge } from './edge.js';
 
-const EPS = 0.5;
+const EPS = 0.1;
 // ^ SM64 collision models use integers
 //   hence the big epsilon
 
