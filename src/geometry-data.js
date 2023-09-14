@@ -3,7 +3,10 @@ import { IntervalSet } from './interval-set.js';
 import { CornerTable } from './topology/corner-table.js';
 import { arrayFill } from './topology/util.js';
 
-const EPS = 1e-4;
+const EPS = 0.5;
+// ^ SM64 collision models use integers
+//   hence the big epsilon
+
 const points_ = [];
 const tmp_ = new Vector3();
 
@@ -83,8 +86,6 @@ export class GeometryData {
   }
 
   _init() {
-    this.clear();
-
     this.geometry.deduplicateAttributeValues();
     this.geometry.deduplicateVertices();
 
@@ -148,7 +149,7 @@ export class GeometryData {
       const faceId = Math.floor(corner / 3);
 
       const edge = new Edge(source, sink, sourceId, sinkId, faceId);
-      this.cornerToEdge[i] = edge;
+      this.cornerToEdge[corner] = edge;
 
       const oppCornerId = this.cornerTable.oppositeCorner[corner];
       if (oppCornerId > -1) {
@@ -168,6 +169,7 @@ export class GeometryData {
       const { p0, p1, faceId, delta } = edge;
 
       // NOTE: Bruteforce for now
+      // UPDATE: It turns out bruteforce is not an issue for SM64 models
       for (let i = 0; i < this.faces.length; ++i) {
         // Do not test the edge against its own face
         if (i === faceId) continue;
@@ -228,7 +230,7 @@ export class GeometryData {
         baseId = 2;
       }
 
-      const oppCornerId = oppositeCorner[corner + baseId];
+      const oppCornerId = this.cornerTable.oppositeCorner[corner + baseId];
       if (oppCornerId === -1) continue;
 
       const oppFaceId = Math.floor(oppCornerId / 3);
@@ -244,7 +246,7 @@ export class GeometryData {
       for (let k = 0; k < 3; ++k) {
         if (k === baseId) continue;
 
-        const oppK = oppositeCorner[corner + k];
+        const oppK = this.cornerTable.oppositeCorner[corner + k];
         if (oppK > -1) {
           const faceId = Math.floor(oppK / 3);
 
