@@ -1,4 +1,4 @@
-import { lll_seg7_collision_hexagonal_platform, lll_seg7_area_1_collision_VERSION_JP, lll_seg7_area_1_collision } from './area1.js';
+import { lll_seg7_area_1_collision, lll_seg7_area_1_collision_VERSION_JP, lll_seg7_collision_hexagonal_platform } from './area1.js';
 import { lll_seg7_area_2_collision } from './area2.js';
 import { lll_seg7_collision_0701D21C } from './collapsing-wooden-platform.js';
 import { lll_seg7_collision_drawbridge } from './drawbridge-part.js';
@@ -15,9 +15,9 @@ import { lll_seg7_collision_falling_wall } from './volcano-falling-trap.js';
 import { lll_seg7_collision_wood_piece } from './wooden-float-small.js';
 
 export default [
-  lll_seg7_collision_hexagonal_platform,
-  lll_seg7_area_1_collision_VERSION_JP,
   lll_seg7_area_1_collision,
+  lll_seg7_area_1_collision_VERSION_JP,
+  lll_seg7_collision_hexagonal_platform,
   lll_seg7_area_2_collision,
   lll_seg7_collision_0701D21C,
   lll_seg7_collision_drawbridge,
