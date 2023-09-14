@@ -42,7 +42,7 @@ function serve() {
 }
 
 export default {
-  input: 'src/index2.js',
+  input: 'src/index.js',
   output: {
     format: 'iife',
     file: path.join(destination, 'bundle.js'),

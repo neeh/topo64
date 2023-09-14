@@ -131,13 +131,11 @@ export class CornerTable {
     return faceId * 3;
   }
 
-  // UNUSED
   allCorners(faceId) {
     const cornerId = faceId * 3;
     return [cornerId, cornerId + 1, cornerId + 2];
   }
 
-  // UNUSED
   faceData(faceId) {
     const cornerId = faceId * 3;
     const faceData = [];
@@ -147,7 +145,6 @@ export class CornerTable {
     return faceData;
   }
 
-  // UNUSED
   setFaceData(faceId, faceData) {
     const cornerId = faceId * 3;
     for (let i = 0; i < 3; ++i) {
@@ -162,15 +159,12 @@ export class CornerTable {
     return this.vertexCorners[vertexId];
   }
 
-  // ?????
-  // UNUSED
   // Returns the parent vertex index of a given corner table vertex.
   vertexParent(vertexId) {
     if (vertexId < this.originalVertexCount) return vertexId;
     return this.nonManifoldVertexParent[vertexId - this.originalVertexCount];
   }
 
-  // UNUSED
   // Returns true if the corner is valid.
   isValid(cornerId) {
     return this.cornerToVertex[cornerId] !== -1;
@@ -179,7 +173,7 @@ export class CornerTable {
   // Returns the valence (or degree) of a vertex.
   // Returns -1 if the given vertex index is not valid.
   valenceOfVertex(vertexId) {
-    // TODO
+
   }
 
   valenceOfCorner(cornerId) {
@@ -269,7 +263,6 @@ export class CornerTable {
     return this.vertexCorners.length - 1;
   }
 
-  // UNUSED
   // Adds a new face connected to three vertices. Note that connectivity is not
   // automatically updated and all opposite corners need to be set explicitly.
   addNewFace(vertices) {
@@ -288,7 +281,6 @@ export class CornerTable {
     }
   }
 
-  // UNUSED
   // Updates the vertex to corner map on a specified vertex. This should be
   // called in cases where the mapping may be invalid (e.g. when the corner
   // table was constructed manually).
@@ -308,7 +300,6 @@ export class CornerTable {
     }
   }
 
-  // UNUSED
   // Sets the new number of vertices. It's a responsibility of the caller to
   // ensure that no corner is mapped beyond the range of the new number of
   // vertices.
@@ -330,7 +321,6 @@ export class CornerTable {
     return this.vertexCorners[vertexId] === -1;
   }
 
-  // UNUSED
   // Makes a given face invalid (all corners are marked as invalid).
   makeFaceInvalid(faceId) {
     if (faceId !== -1) {
@@ -341,11 +331,10 @@ export class CornerTable {
     }
   }
 
-  // UNUSED
   // Updates mapping between faces and a vertex using the corners mapped to
   // the provided vertex.
   updateFaceToVertexMap(vertexId) {
-    // TODO
+
   }
 
   // Computes opposite corners mapping from the data stored in
