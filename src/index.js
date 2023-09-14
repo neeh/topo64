@@ -1,82 +1,44 @@
-import { Scene, Color, PerspectiveCamera, WebGLRenderer, AmbientLight, DirectionalLight, Mesh, BoxGeometry, MeshBasicMaterial } from 'three';
-import { Float32BufferAttribute, Uint16BufferAttribute, BufferGeometry, LineBasicMaterial, LineSegments, AdditiveBlending, Group } from 'three';
+import { Scene, Color, PerspectiveCamera, WebGLRenderer } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { createModel } from './commands.js';
 import levels from './levels/index.js';
-import { CornerTable } from './topology/corner-table.js';
-import { arrayFill } from './topology/util.js';
-import { computeEdges } from './edge.js';
+import { createModel } from './commands.js';
+import { GeometryData } from './geometry-data.js';
+import { createRenderObjects } from './rendering.js';
 
 let scene, camera, renderer, controls;
-// let cube;
 
 let lastTime = 0;
 let globalTime = 0;
 let playbackSpeed = 1;
 
-init();
-let frame = requestAnimationFrame(animate);
+const RenderMode = {
+  SOLID: 0,
+  XRAY: 1
+};
+let renderMode = RenderMode.SOLID;
 
-function createLineMesh(vertices, indices, color) {
-  const geometry = new BufferGeometry();
-  geometry.setAttribute('position', new Float32BufferAttribute(vertices, 3));
-  geometry.setIndex(new Uint16BufferAttribute(indices, 1));
+function setRenderMode(mode) {
+  if (renderMode === mode) return;
+  renderMode = mode;
 
-  const material = new LineBasicMaterial({
-    depthTest: false,
-    depthWrite: false,
-    color
-  });
-
-  return new LineSegments(geometry, material);
-}
-
-function createTriMesh(vertices, indices, color) {
-  const geometry = new BufferGeometry();
-  geometry.setAttribute('position', new Float32BufferAttribute(vertices, 3));
-  geometry.setIndex(new Uint16BufferAttribute(indices, 1));
-
-  const material = new MeshBasicMaterial({
-    blending: AdditiveBlending,
-    depthTest: false,
-    depthWrite: false,
-    color
-  });
-
-  return new Mesh(geometry, material);
-}
-
-function createRenderNode(data) {
-  const group = new Group();
-  group.add(createTriMesh(data.vertices, data.faces, '#060608'));
-  group.add(createLineMesh(data.vertices, data.edges, '#404244'));
-  group.add(createLineMesh(data.vertices, data.seams, 'orange'));
-  group.add(createLineMesh(data.vertices, data.misaligned, 'red'));
-  return group;
-}
-
-function computeRenderInfo(geometry, edges) {
-  const indEdges = [];
-  const indSeams = [];
-  const indMisaligned = [];
-
-  for (const edge of edges) {
-    let indices = indEdges;
-    if (edge.isSeam) {
-      indices = indSeams;
-    } else if (edge.isMisaligned) {
-      indices = indMisaligned;
+  // I don't use scene.overrideMaterial here because I need a specific look
+  // material for each type of object
+  scene.traverse(node => {
+    if (node.material && node.userData.materials) {
+      const mat = node.userData.materials[renderMode];
+      if (mat) {
+        node.material = mat;
+      }
     }
-    indices.push(edge.p0, edge.p1);
-  }
+  });
+}
 
-  return {
-    vertices: geometry.posAttribute.values,
-    faces: geometry.getPositionConnectivity(),
-    edges: indEdges,
-    seams: indSeams,
-    misaligned: indMisaligned
-  };
+function toggleRenderMode() {
+  if (renderMode === RenderMode.SOLID) {
+    setRenderMode(RenderMode.XRAY);
+  } else {
+    setRenderMode(RenderMode.SOLID);
+  }
 }
 
 function init() {
@@ -84,50 +46,39 @@ function init() {
   scene.background = new Color(0x202124);
 
   camera = new PerspectiveCamera(50, 1, 4, 80000);
-  camera.position.z = 40000;
+  camera.position.set(4000, 2000, 0);
 
-  renderer = new WebGLRenderer();
+  renderer = new WebGLRenderer({
+    // logarithmicDepthBuffer: true,
+    antialias: true
+  });
+  renderer.sortObjects = false;
 
   controls = new OrbitControls(camera, renderer.domElement);
 
+  // SM64 model
+  const model = createModel(levels.hmc[0]);
 
-  const model = createModel(levels.castle_courtyard[0]);
-  // scene.add(model.buildGfx());
-  // const geometry = model.createGeometry();
-  // geometry.deduplicateAttributeValues();
-  // geometry.deduplicateVertices();
-  //
-  // const posIndex = geometry.getPositionConnectivity();
-  // const cornerTable = new CornerTable();
-  // cornerTable.init(posIndex);
+  // Geometry operations
+  const geometryData = new GeometryData(model.createGeometry());
+  geometryData.findMisalignedSeamSections();
+  geometryData.findFoldedEdges();
 
-  const geometry = model.createGeometry();
-  const edges = computeEdges(geometry);
-  const renderInfo = computeRenderInfo(geometry, edges);
-  const group = createRenderNode(renderInfo);
-  scene.add(group);
+  // Three rendering
+  const renderObjs = createRenderObjects(geometryData);
+  scene.add(renderObjs.group);
 
-
-
-  // ttm.forEach(commands => scene.add(createModel(commands).buildGfx()));
-
-  // scene.add(createModel(ttm[0]).buildGfx());
-
-  const ambient = new AmbientLight(0xffffff, 0.3);
-  const light = new DirectionalLight(0xffffff, 1.2);
-  light.position.set(-0.4, 0.6, 0.5).normalize();
-  scene.add(ambient, light);
-
-  // cube = new Mesh(
-  //   new BoxGeometry(400, 400, 400),
-  //   new MeshBasicMaterial({ color: 'green', wireframe: true })
-  // );
-  // scene.add(cube);
-
+  window.addEventListener('keydown', onKeyDown)
   window.addEventListener('resize', onResize);
   onResize();
 
   document.body.appendChild(renderer.domElement);
+}
+
+function onKeyDown(e) {
+  if (e.code === 'KeyE') {
+    toggleRenderMode();
+  }
 }
 
 function onResize() {
@@ -146,8 +97,8 @@ function animate(time) {
   lastTime = time;
   const dt = delta * 0.001;
 
-  // cube.rotation.y += dt * 1.17293402;
-  // cube.rotation.x += dt * 0.8912312;
-
   renderer.render(scene, camera);
 }
+
+init();
+let frame = requestAnimationFrame(animate);

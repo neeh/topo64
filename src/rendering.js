@@ -90,7 +90,7 @@ export function createRenderObjects(geometryData) {
   }
 
   const triangles = createTriangleMesh(vertices, indices, '#18181a', '#060608');
-  const edges = createLineMesh(vertices, indEdges, '#303236', '#08080A');
+  const edges = createLineMesh(vertices, indEdges, '#303236', '#0a0a0c');
   const seams = createLineMesh(vertices, indSeams, '#A05000', '#804000', true);
   const folds = createLineMesh(vertices, indFolds, 'red', 'red', true);
   const misaligned = createEdgeSectionMesh(geometryData.edges, 0, '#00d0d0', '#00b0b0', true);
