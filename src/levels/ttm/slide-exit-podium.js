@@ -1,5 +1,3 @@
-import { COL_INIT, COL_VERTEX_INIT, COL_VERTEX, COL_TRI_INIT, COL_TRI, COL_TRI_SPECIAL, COL_TRI_STOP, COL_SPECIAL_INIT, SPECIAL_OBJECT_WITH_YAW, COL_WATER_BOX_INIT, COL_WATER_BOX, COL_END } from '../../commands.js';
-import { SurfaceType } from '../../surface-terrains.js';
 
 export function ttm_seg7_collision_podium_warp() {
   COL_INIT();
