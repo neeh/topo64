@@ -59,7 +59,7 @@ function init() {
   controls = new OrbitControls(camera, renderer.domElement);
 
   // SM64 model
-  model = createModel(levels.wmotr[0]);
+  model = createModel(levels.bob[0]);
 
   // Geometry operations
   const geometryData = new GeometryData(model.createGeometry());

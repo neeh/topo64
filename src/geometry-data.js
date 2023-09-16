@@ -156,7 +156,8 @@ export class GeometryData {
     for (const edge of this.edges) {
       if (!edge.isSeam) continue;
 
-      const normEps = 0.001; // angle
+      // const normEps = 0.001; // angle
+      const normEps = 0.0025; // angle
       const lowerThreshold = 0.001;
       const upperThreshold = 5;
 
@@ -238,7 +239,7 @@ export class GeometryData {
           }
         }
         if (max > min) {
-          if (d <= lowerThreshold && dirDotNormal <= normEps && inside) {
+          if (d <= lowerThreshold && dirDotNormal <= 0.001 && inside) {
             edge.markAlignedSection(min, max);
           } else {
             edge.markMisalignedSection(min, max);
