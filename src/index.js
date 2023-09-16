@@ -7,6 +7,7 @@ import { createRenderObjects } from './rendering.js';
 
 let scene, camera, renderer, controls;
 let model;
+let renderObjs;
 
 let lastTime = 0;
 let globalTime = 0;
@@ -58,7 +59,7 @@ function init() {
   controls = new OrbitControls(camera, renderer.domElement);
 
   // SM64 model
-  const model = createModel(levels.hmc[0]);
+  model = createModel(levels.wmotr[0]);
 
   // Geometry operations
   const geometryData = new GeometryData(model.createGeometry());
@@ -66,7 +67,7 @@ function init() {
   geometryData.findFoldedEdges();
 
   // Three rendering
-  const renderObjs = createRenderObjects(geometryData);
+  renderObjs = createRenderObjects(geometryData);
   scene.add(renderObjs.group);
 
   document.addEventListener('keydown', onKeyDown)
@@ -77,10 +78,34 @@ function init() {
 }
 
 function onKeyDown(e) {
-  if (e.code === 'KeyE') {
+  switch (e.code) {
+  case 'Digit1':
+    if (renderObjs) renderObjs.triangles.visible = !renderObjs.triangles.visible;
+    break;
+  case 'Digit2':
+    if (renderObjs) renderObjs.edges.visible = !renderObjs.edges.visible;
+    break;
+  case 'Digit3':
+    if (renderObjs) renderObjs.seams.visible = !renderObjs.seams.visible;
+    break;
+  case 'Digit4':
+    if (renderObjs) renderObjs.boundary.visible = !renderObjs.boundary.visible;
+    break;
+  case 'Digit5':
+    if (renderObjs) renderObjs.misaligned.visible = !renderObjs.misaligned.visible;
+    break;
+  case 'Digit6':
+    if (renderObjs) renderObjs.folds.visible = !renderObjs.folds.visible;
+    break;
+  case 'KeyB':
+    if (renderObjs) renderObjs.seams.visible = !renderObjs.seams.visible;
+    break;
+  case 'KeyE':
     toggleRenderMode();
-  } else if (e.code === 'KeyP') {
+    break;
+  case 'KeyP':
     if (model) model.downloadObj();
+    break;
   }
 }
 
