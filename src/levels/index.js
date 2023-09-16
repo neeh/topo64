@@ -16,8 +16,10 @@ import pss from './pss/index.js';
 import sa from './sa/index.js';
 import sl from './sl/index.js';
 import thi from './thi/index.js';
+import ttc from './ttc/index.js';
 import ttm from './ttm/index.js';
 import vcutm from './vcutm/index.js';
+import wdw from './wdw/index.js';
 import wf from './wf/index.js';
 import wmotr from './wmotr/index.js';
 
@@ -40,8 +42,10 @@ export default {
   sa,
   sl,
   thi,
+  ttc,
   ttm,
   vcutm,
+  wdw,
   wf,
   wmotr
 };
