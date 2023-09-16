@@ -282,7 +282,7 @@ for (const name of specialObjNames) {
 }
 
 export function createModel(commandsWrap) {
-  const model = new CollisionModel();
+  const model = new CollisionModel(commandsWrap.name);
 
   curModel = model;
   commandsWrap();

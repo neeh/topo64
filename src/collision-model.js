@@ -3,7 +3,8 @@ import { SurfaceColors } from './surface-terrains.js';
 import { Geometry } from './topology/geometry.js';
 
 export class CollisionModel {
-  constructor() {
+  constructor(name = 'model') {
+    this.name = name;
     this.vertices = [];
     this.batches = [];
     this.specialObjs = [];
@@ -79,8 +80,7 @@ export class CollisionModel {
     const indices = [];
     for (const batch of this.batches) {
       const { tris } = batch;
-      for (let i = 0, ofs = 0; i < tris.length; ++i, ofs += 3) {
-        const tri = tris[i];
+      for (const tri of batch.tris) {
         indices.push(tri[0], tri[1], tri[2]);
       }
     }
@@ -88,5 +88,31 @@ export class CollisionModel {
 
     geometry.numVertices += this.vertices.length;
     return geometry;
+  }
+
+  convertToObj() {
+    const lines = [];
+    for (const vertex of this.vertices) {
+      lines.push('v ' + vertex.join(' '));
+    }
+    for (const batch of this.batches) {
+      for (const tri of batch.tris) {
+        const ind = tri.slice(0, 3).map(i => i + 1);
+        lines.push('f ' + ind.join(' '));
+      }
+    }
+    return lines.join('\n');
+  }
+
+  downloadObj() {
+    const content = this.convertToObj();
+    const url = window.URL.createObjectURL(new Blob([content]));
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = url;
+    a.download = this.name + '.obj';
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
   }
 }

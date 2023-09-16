@@ -6,6 +6,7 @@ import { GeometryData } from './geometry-data.js';
 import { createRenderObjects } from './rendering.js';
 
 let scene, camera, renderer, controls;
+let model;
 
 let lastTime = 0;
 let globalTime = 0;
@@ -68,7 +69,7 @@ function init() {
   const renderObjs = createRenderObjects(geometryData);
   scene.add(renderObjs.group);
 
-  window.addEventListener('keydown', onKeyDown)
+  document.addEventListener('keydown', onKeyDown)
   window.addEventListener('resize', onResize);
   onResize();
 
@@ -78,6 +79,8 @@ function init() {
 function onKeyDown(e) {
   if (e.code === 'KeyE') {
     toggleRenderMode();
+  } else if (e.code === 'KeyP') {
+    if (model) model.downloadObj();
   }
 }
 
