@@ -152,6 +152,103 @@ export class GeometryData {
     }
   }
 
+  findMisalignedSeamSections2() {
+    for (const edge of this.edges) {
+      if (!edge.isSeam) continue;
+
+      const normEps = 0.001; // angle
+      const lowerThreshold = 0.001;
+      const upperThreshold = 5;
+
+      edge.clearSections();
+      const { p0, p1, faceId, delta, dir } = edge;
+
+      // NOTE: Bruteforce for now
+      // UPDATE: It turns out bruteforce is not an issue for SM64 models
+      for (let i = 0; i < this.faces.length; ++i) {
+        // Do not test the edge against its own face
+        if (i === faceId) continue;
+
+        const face = this.faces[i];
+        const plane = this.facePlanes[i];
+        const edgePlanes = this.faceEdgePlanes[i];
+
+        // seam is not aligned to face
+        const eps = 0.01;
+        const dirDotNormal = Math.abs(dir.dot(plane.normal));
+        if (dirDotNormal > eps) continue;
+
+        const d0 = plane.distanceToPoint(p0);
+        const d1 = plane.distanceToPoint(p1);
+
+        // average distance from line to plane
+        const d = Math.abs(d0 + d1) * 0.5;
+        if (d > upperThreshold) continue;
+
+        // slice test
+        const ta = edge.relativeDistanceToPoint(face.a);
+        const tb = edge.relativeDistanceToPoint(face.b);
+        const tc = edge.relativeDistanceToPoint(face.c);
+        if (ta <= 0 && tb <= 0 && tc <= 0) continue;
+        if (ta >= 1 && tb >= 1 && tc >= 1) continue;
+
+        // now check if the edge is inside or adjacent to the face
+        let min = 0;
+        let max = 1;
+        let inside = true;
+        for (let j = 0; j < edgePlanes.length; ++j) {
+          const edgePlane = edgePlanes[j];
+
+          // edge is sort of parallel -> not sure what eps to use here
+          if (Math.abs(dir.dot(edgePlane.normal)) <= normEps) {
+            // average edge distance
+            const edgeDist = (edgePlane.distanceToPoint(p0) + edgePlane.distanceToPoint(p1)) * 0.5;
+            if (edgeDist > upperThreshold) {
+              // that edge of this face is too far away
+              // --> early out with no result
+              min = max;
+              inside = false;
+              break;
+            } else if (edgeDist > lowerThreshold) {
+              // the seam is almost touching the edge of this face
+              // but it is not enough for the edge to be inside the face
+              // --> project the edge along the seam and exit
+              let t0 = ta, t1 = tb;
+              if (j === 0) { t0 = tb; t1 = tc; }
+              else if (j === 1) { t0 = tc; t1 = ta; }
+              min = Math.min(t0, t1);
+              max = Math.max(t0, t1);
+              inside = false;
+              break;
+            }
+            // the seam is either touching the edge of this face
+            // OR the seam is inside this face
+            // --> continue
+          } else {
+            // edge is not parallel find the interior bounds along the seam
+            const denom = delta.dot(edgePlane.normal);
+            const t = -edgePlane.distanceToPoint(p0) / denom;
+            if (denom < 0) {
+              // seam points towards face, use max constraint
+              min = Math.max(min, t);
+            } else {
+              // seam points away from the face, use min constraint
+              max = Math.min(max, t);
+            }
+          }
+        }
+        if (max > min) {
+          if (d <= lowerThreshold && dirDotNormal <= normEps && inside) {
+            edge.markAlignedSection(min, max);
+          } else {
+            edge.markMisalignedSection(min, max);
+          }
+        }
+      }
+      edge.updateSections();
+    }
+  }
+
   findFoldedEdges() {
     for (const edge of this.edges) edge.markFold(false);
 

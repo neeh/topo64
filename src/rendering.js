@@ -65,7 +65,7 @@ function createEdgeSectionMesh(edges, sectionType = 0, color, xrayColor, forceBl
   for (const edge of edges) {
     const { p0, p1, delta } = edge;
 
-    const sections = sectionType === 0 ? edge.misalignedSections : edge.buriedSections;
+    const sections = sectionType === 0 ? edge.misalignedSections : edge.boundarySections;
     const t = sections.bounds;
     for (let i = 0; i < t.length; ++i) {
       tmp_.copy(p0).addScaledVector(delta, t[i]).toArray(vertices, vertices.length);
@@ -95,19 +95,19 @@ export function createRenderObjects(geometryData) {
   const edges = createLineMesh(vertices, indEdges, '#36373d', '#0d0d10');
   const seams = createLineMesh(vertices, indSeams, '#A05000', '#804000', true);
   const folds = createLineMesh(vertices, indFolds, 'red', 'red', true);
-  const misaligned = createEdgeSectionMesh(geometryData.edges, 0, '#00d0d0', '#00b0b0', true);
-  const buried = createEdgeSectionMesh(geometryData.edges, 1, 'darkblue', 'darkblue', true);
+  const boundary = createEdgeSectionMesh(geometryData.edges, 1, '#008080', '#007070', true);
+  const misaligned = createEdgeSectionMesh(geometryData.edges, 0, 'aqua', 'aqua', true);
 
   const group = new Group();
-  group.add(triangles, edges, seams, folds, misaligned, buried);
+  group.add(triangles, edges, seams, folds, boundary, misaligned);
 
   return {
     triangles,
     edges,
     seams,
     folds,
+    boundary,
     misaligned,
-    buried,
     group
   };
 }

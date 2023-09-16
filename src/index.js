@@ -62,7 +62,7 @@ function init() {
 
   // Geometry operations
   const geometryData = new GeometryData(model.createGeometry());
-  geometryData.findMisalignedSeamSections();
+  geometryData.findMisalignedSeamSections2();
   geometryData.findFoldedEdges();
 
   // Three rendering
