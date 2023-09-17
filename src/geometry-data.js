@@ -161,7 +161,7 @@ export class GeometryData {
       if (!edge.isSeam) continue;
 
       // const normEps = 0.001; // angle
-      const normEps = 0.0025; // angle
+      const normEps = 0.004; // angle
       const lowerThreshold = 0.001;
       const upperThreshold = 5;
 
