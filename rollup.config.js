@@ -3,6 +3,8 @@ import { fileURLToPath } from 'node:url';
 import { createServer } from 'http-server';
 import opener from 'opener';
 import nodeResolve from '@rollup/plugin-node-resolve';
+import svelte from 'rollup-plugin-svelte';
+import css from 'rollup-plugin-css-only';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -49,6 +51,15 @@ export default {
     sourcemap: !PROD
   },
   plugins: [
+    svelte({ // resolveId, load, transform
+      include: 'src/components/**/*.svelte',
+      compilerOptions: {
+        dev: !PROD
+      }
+    }),
+    css({
+      output: 'bundle.css'
+    }),
     nodeResolve({
       browser: true
     }),

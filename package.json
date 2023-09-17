@@ -17,6 +17,9 @@
     "http-server": "^14.1.1",
     "opener": "^1.5.2",
     "rollup": "^3.29.1",
+    "rollup-plugin-css-only": "^4.3.0",
+    "rollup-plugin-svelte": "^7.1.6",
+    "svelte": "^4.2.0",
     "three": "^0.156.1"
   }
 }
