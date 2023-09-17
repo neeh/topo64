@@ -160,10 +160,10 @@ export class GeometryData {
     for (const edge of this.edges) {
       if (!edge.isSeam) continue;
 
-      // const normEps = 0.001; // angle
-      const normEps = 0.004; // angle
-      const lowerThreshold = 0.001;
-      const upperThreshold = 5;
+      const lowerDistanceThreshold = 0.001;
+      const upperDistanceThreshold = 5;
+      const lowerAngleThreshold = 0.001; // ~2.5 degrees
+      const upperAngleThreshold = 0.035; // ~15 degrees
 
       edge.clearSections();
       const { p0, p1, faceId, delta, dir } = edge;
@@ -179,16 +179,15 @@ export class GeometryData {
         const edgePlanes = this.faceEdgePlanes[i];
 
         // seam is not aligned to face
-        const eps = 0.01;
         const dirDotNormal = Math.abs(dir.dot(plane.normal));
-        if (dirDotNormal > eps) continue;
+        if (dirDotNormal > upperAngleThreshold) continue;
 
         const d0 = plane.distanceToPoint(p0);
         const d1 = plane.distanceToPoint(p1);
 
         // average distance from line to plane
         const d = Math.abs(d0 + d1) * 0.5;
-        if (d > upperThreshold) continue;
+        if (d > upperDistanceThreshold) continue;
 
         // slice test
         const ta = edge.relativeDistanceToPoint(face.a);
@@ -204,17 +203,17 @@ export class GeometryData {
         for (let j = 0; j < edgePlanes.length; ++j) {
           const edgePlane = edgePlanes[j];
 
-          // edge is sort of parallel -> not sure what eps to use here
-          if (Math.abs(dir.dot(edgePlane.normal)) <= normEps) {
+          // edge is sort of parallel
+          if (Math.abs(dir.dot(edgePlane.normal)) <= upperAngleThreshold) {
             // average edge distance
             const edgeDist = (edgePlane.distanceToPoint(p0) + edgePlane.distanceToPoint(p1)) * 0.5;
-            if (edgeDist > upperThreshold) {
+            if (edgeDist > upperDistanceThreshold) {
               // that edge of this face is too far away
               // --> early out with no result
               min = max;
               inside = false;
               break;
-            } else if (edgeDist > lowerThreshold) {
+            } else if (edgeDist > lowerDistanceThreshold) {
               // the seam is almost touching the edge of this face
               // but it is not enough for the edge to be inside the face
               // --> project the edge along the seam and exit
@@ -243,7 +242,7 @@ export class GeometryData {
           }
         }
         if (max > min) {
-          if (d <= lowerThreshold && dirDotNormal <= 0.001 && inside) {
+          if (d <= lowerDistanceThreshold && dirDotNormal <= lowerAngleThreshold && inside) {
             edge.markAlignedSection(min, max);
           } else {
             edge.markMisalignedSection(min, max);
