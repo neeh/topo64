@@ -22,6 +22,7 @@ export class GeometryData {
     this.faces = [];
     this.facePlanes = [];
     this.faceEdgePlanes = [];
+    this.faceIsDegenerate = [];
 
     this.edges = [];
     this.cornerToEdge = [];
@@ -78,6 +79,9 @@ export class GeometryData {
       edgePlanes.push(new Plane().setFromCoplanarPoints(p0, p1, tmp_));
     }
     this.faceEdgePlanes.push(edgePlanes);
+
+    const degenerate = Math.abs(normal.lengthSq() - 1) > 0.01;
+    this.faceIsDegenerate.push(degenerate);
   }
 
   _computeEdges() {
@@ -168,7 +172,7 @@ export class GeometryData {
       // UPDATE: It turns out bruteforce is not an issue for SM64 models
       for (let i = 0; i < this.faces.length; ++i) {
         // Do not test the edge against its own face
-        if (i === faceId) continue;
+        if (i === faceId || this.faceIsDegenerate[i]) continue;
 
         const face = this.faces[i];
         const plane = this.facePlanes[i];
