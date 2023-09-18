@@ -5,11 +5,12 @@
   export let icon;
   export let title;
   export let key;
+  export let onclick;
 </script>
 
-<button class={active ? "active" : ""} title={title}>
-  <span>{key}</span>
+<button class={active ? "active" : ""} title={title} on:click={onclick}>
   <Icon id="{icon}"/>
+  <span>{key}</span>
 </button>
 
 <style>
@@ -17,17 +18,32 @@
     background-color: #404248;
     width: 3rem;
     height: 3rem;
+    padding: 0;
     border: 1px solid #181a1f;
-    border-radius: 3px;
+    border-radius: 0.25rem;
     position: relative;
     color: #bcbcbf;
     cursor: pointer;
     fill: #fcfcff;
   }
 
-  .active {
+  button:hover {
+    background-color: #50525a;
+    color: #fff;
+  }
+
+  button.active {
+    /* background-color: #307677; */
     background-color: #4d78cc;
     fill: #fff;
+    color: #fff;
+    background-color: #a03000;
+    fill: #101010;
+    color: #101010;
+  }
+
+  button.active:hover {
+    background-color: #557ecf;
     color: #fff;
   }
 
