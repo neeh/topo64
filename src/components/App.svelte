@@ -1,5 +1,20 @@
 <script>
+  import { beforeUpdate, afterUpdate } from 'svelte';
   import ToolButton from './ToolButton.svelte';
+  import Menu from './Menu.svelte';
+  import TreeView from './TreeView.svelte';
+  import levels from '../levels/index.js';
+
+  const folders = Object.entries(levels).map(entry => ({
+    label: entry[0],
+    icon: 'folder',
+    open: Math.random() > 0.9,
+    children: entry[1].map(fn => ({
+      label: fn.name,
+      icon: 'file',
+      data: fn
+    }))
+  }));
 
   /*
   import { writable } from 'svelte/store';
@@ -71,6 +86,7 @@
 
 <div class="app">
   <div class="menu">
+    <TreeView children={folders} />
   </div>
   <div class="main">
     <ul class="toolbar">
@@ -84,16 +100,13 @@
         <ToolButton title="Toggle seams" icon="seams" key="3" active={$seams} onclick={() => seams.update(v => !v)} />
       </li>
       <li>
-        <ToolButton title="Toggle seams" icon="seams2" key="3" active={$seams} onclick={() => seams.update(v => !v)} />
+        <ToolButton title="Toggle boundary seams" icon="bounds" key="4" active={$bounds} onclick={() => bounds.update(v => !v)} />
       </li>
       <li>
-        <ToolButton title="Toggle bounds" icon="bounds" key="4" active={$bounds} onclick={() => bounds.update(v => !v)} />
+        <ToolButton title="Toggle misaligned seams" icon="gaps" key="5" active={$gaps} onclick={() => gaps.update(v => !v)} />
       </li>
       <li>
-        <ToolButton title="Toggle gaps" icon="gaps" key="5" active={$gaps} onclick={() => gaps.update(v => !v)} />
-      </li>
-      <li>
-        <ToolButton title="Toggle folds" icon="folds" key="6" active={$folds} onclick={() => folds.update(v => !v)} />
+        <ToolButton title="Toggle folded edges" icon="folds" key="6" active={$folds} onclick={() => folds.update(v => !v)} />
       </li>
     </ul>
   </div>
@@ -107,7 +120,8 @@
   .menu {
     /*background-color: #303236;*/
     box-sizing: content-box;
-    width: 20em;
+    width: 16rem;
+    flex-shrink: 0;
     border-right: 1px solid #494c50;
   }
   .main {
