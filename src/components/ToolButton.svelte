@@ -8,49 +8,50 @@
   export let onclick;
 </script>
 
-<button class={active ? "active" : ""} title={title} on:click={onclick}>
+<button class={active ? "active" : ""} title={title + ` [Press ${key}]`} on:click={onclick}>
   <Icon id="{icon}"/>
   <span>{key}</span>
 </button>
 
 <style>
   button {
-    background-color: #404248;
-    width: 3rem;
-    height: 3rem;
+    background-color: #303236;
+    box-sizing: content-box;
+    width: 2.5rem;
+    height: 2.5rem;
     padding: 0;
     border: 1px solid #181a1f;
     border-radius: 0.25rem;
     position: relative;
     color: #bcbcbf;
     cursor: pointer;
-    fill: #fcfcff;
+    fill: currentcolor;
+    user-select: none;
   }
 
   button:hover {
-    background-color: #50525a;
+    background-color: #404248;
     color: #fff;
   }
 
   button.active {
+    background-color: #a03000;
+    color: #101010;
     /* background-color: #307677; */
     background-color: #4d78cc;
-    fill: #fff;
     color: #fff;
-    background-color: #a03000;
-    fill: #101010;
-    color: #101010;
+    background-color: #32456b;
   }
 
   button.active:hover {
     background-color: #557ecf;
-    color: #fff;
+    background-color: #3c5589;
   }
 
   span {
     position: absolute;
-    bottom: 2px;
-    right: 4px;
+    bottom: 1px;
+    right: 3px;
     font-size: 0.7rem;
   }
 </style>
