@@ -5,9 +5,9 @@
   export let store;
   export let label;
   export let icon;
-  export let level = 0;
+  export let level = -1;
 
-  const root = level === 0;
+  const root = level === -1;
 
   let expanded = root;
 </script>
@@ -16,7 +16,7 @@
   <TreeViewNode
     label={label}
     icon={icon}
-    level={level + 1}
+    level={level}
     expandable={true}
     expanded={expanded}
     onClick={() => expanded = !expanded}

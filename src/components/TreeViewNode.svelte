@@ -9,7 +9,7 @@
   export let expanded = false;
 </script>
 
-<button data-key={label} on:click={onClick}>
+<button data-key={label} on:click={onClick} style="padding-left: {(level * 2 + 1) * 0.25}rem">
   <div class="arrow">
     {#if expandable}
       <Icon id={expanded ? 'arrow-down' : 'arrow-right'} />

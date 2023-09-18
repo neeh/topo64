@@ -85,7 +85,7 @@
 </script>
 
 <div class="app">
-  <div class="menu">
+  <div class="nav">
     <TreeView children={folders} />
   </div>
   <div class="main">
@@ -117,13 +117,30 @@
     display: flex;
     height: 100%;
   }
-  .menu {
+  .nav {
     /*background-color: #303236;*/
     box-sizing: content-box;
-    width: 16rem;
+    width: 20rem;
     flex-shrink: 0;
+    padding: 0.5rem 0;
     border-right: 1px solid #494c50;
+    overflow: auto;
+    /*scrollbar-color: #303236 transparent;*/
   }
+  /*
+  .nav::-webkit-scrollbar {
+    width: 0.5rem;
+    height: 0.5rem;
+  }
+  .nav::-webkit-scrollbar-track {
+    background-color: transparent;
+    margin: 0.25rem;
+  }
+  .nav::-webkit-scrollbar-thumb {
+    background-color: #404248;
+    border-radius: 0.25rem;
+  }
+  */
   .main {
     flex-grow: 1;
   }

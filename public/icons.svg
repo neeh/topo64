@@ -9,7 +9,7 @@
     <path d="M8 6v8l5-4z"/>
   </symbol>
   <symbol id="arrow-down" viewBox="0 0 20 20">
-    <path d="M6 8h8l-4 6z"/>
+    <path d="M6 8h8l-4 5z"/>
   </symbol>
   <symbol id="faces" viewBox="0 0 40 40">
     <path d="M15.25 11l-5 4h14l5-4h-14zm14.75.75l-5 4v14l5-4v-14zM10 16v14h14V16H10z"/>

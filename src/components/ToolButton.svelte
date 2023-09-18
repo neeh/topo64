@@ -29,7 +29,8 @@
     user-select: none;
   }
 
-  button:hover {
+  button:hover,
+  button:focus {
     background-color: #404248;
     color: #fff;
   }
@@ -43,7 +44,8 @@
     background-color: #32456b;
   }
 
-  button.active:hover {
+  button.active:hover,
+  button.active:focus {
     background-color: #557ecf;
     background-color: #3c5589;
   }
