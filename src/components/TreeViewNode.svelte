@@ -9,7 +9,7 @@
   export let expanded = false;
 </script>
 
-<button data-key={label} on:click={onClick} style="padding-left: {(level * 2 + 1) * 0.25}rem">
+<button class="item" data-key={label} on:click={onClick} style="padding-left: {(level * 2 + 1) * 0.25}rem">
   <div class="arrow">
     {#if expandable}
       <Icon id={expanded ? 'arrow-down' : 'arrow-right'} />
@@ -18,17 +18,16 @@
   <div class="icon">
     <Icon id={icon} />
   </div>
-  <span>{label}</span>
+  <div>{label}</div>
 </button>
 
 <style>
-  button {
-    display: block;
+  .item {
+    display: flex;
     background: transparent;
     width: 100%;
     height: 1.25rem;
-    padding: 0;
-    padding-left: 0.5rem;
+    padding: 0 0.75rem;
     border: 0;
     margin: 0;
     color: #cfd0df;
@@ -40,23 +39,21 @@
     fill: currentcolor;
     cursor: pointer;
   }
-  button:hover,
-  button:focus {
-    background-color: #303237;
+  .item:hover,
+  .item:focus {
+    background-color: #282930;
     color: #fff;
   }
-  button:focus {
+  .item:focus {
     outline: none;
   }
   .icon {
     width: 1.25rem;
     height: 1.25rem;
-    float: left;
     margin-right: 0.375rem;
   }
   .arrow {
     width: 1.25rem;
     height: 1.25rem;
-    float: left;
   }
 </style>

@@ -48,10 +48,13 @@
 
 <style>
   ul {
+    display: table;
+    min-width: 100%;
     padding: 0;
     margin: 0;
   }
   li {
+    display: table-row;
     list-style-type: none;
   }
 </style>

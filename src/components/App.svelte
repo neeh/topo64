@@ -8,7 +8,7 @@
   const folders = Object.entries(levels).map(entry => ({
     label: entry[0],
     icon: 'folder',
-    open: Math.random() > 0.9,
+    open: false,
     children: entry[1].map(fn => ({
       label: fn.name,
       icon: 'file',
@@ -120,7 +120,7 @@
   .nav {
     /*background-color: #303236;*/
     box-sizing: content-box;
-    width: 20rem;
+    width: 22rem;
     flex-shrink: 0;
     padding: 0.5rem 0;
     border-right: 1px solid #494c50;
