@@ -6,3 +6,4 @@ export const seams = writable(true);
 export const bounds = writable(true);
 export const gaps = writable(true);
 export const folds = writable(true);
+export const level = writable(null);
