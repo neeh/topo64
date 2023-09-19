@@ -13,6 +13,7 @@ import hmc from './hmc/index.js';
 import jrb from './jrb/index.js';
 import lll from './lll/index.js';
 import pss from './pss/index.js';
+import rr from './rr/index.js';
 import sa from './sa/index.js';
 import sl from './sl/index.js';
 import thi from './thi/index.js';
@@ -39,6 +40,7 @@ export default {
   jrb,
   lll,
   pss,
+  rr,
   sa,
   sl,
   thi,
