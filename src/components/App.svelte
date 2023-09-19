@@ -5,6 +5,7 @@
   import { faces, edges, seams, bounds, gaps, folds, level } from '../stores.js';
   import ToolButton from './ToolButton.svelte';
   import TreeView from './TreeView.svelte';
+  import Canvas from './Canvas.svelte';
 
   const folders = Object.entries(levels).map(entry => ({
     label: entry[0],
@@ -44,6 +45,7 @@
     <TreeView children={folders} selected={level} />
   </div>
   <div class="main">
+    <Canvas />
     <ul class="toolbar">
       <li>
         <ToolButton
@@ -132,10 +134,17 @@
   } */
   .main {
     flex-grow: 1;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    position: relative;
   }
   .toolbar {
     padding: 0;
-    margin: 0.75rem;
+    margin: 0;
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
   }
   .toolbar li {
     display: inline-block;
