@@ -1,9 +1,10 @@
 <script>
   import { beforeUpdate, afterUpdate } from 'svelte';
-  import ToolButton from './ToolButton.svelte';
-  import Menu from './Menu.svelte';
-  import TreeView from './TreeView.svelte';
   import levels from '../levels/index.js';
+  import * as stores from '../stores.js';
+  import { faces, edges, seams, bounds, gaps, folds, level } from '../stores.js';
+  import ToolButton from './ToolButton.svelte';
+  import TreeView from './TreeView.svelte';
 
   const folders = Object.entries(levels).map(entry => ({
     label: entry[0],
@@ -16,97 +17,87 @@
     }))
   }));
 
-  /*
-  import { writable } from 'svelte/store';
+  level.update(() => levels.lll[0]);
 
-  const renderFlags = writable({
-    faces: true,
-    edges: true,
-    seams: true,
-    bounds: true,
-    gaps: true,
-    folds: true
-  });
+  const toggle = value => !value;
+  const toggleFaces = () => faces.update(toggle);
+  const toggleEdges = () => edges.update(toggle);
+  const toggleSeams = () => seams.update(toggle);
+  const toggleBounds = () => bounds.update(toggle);
+  const toggleGaps = () => gaps.update(toggle);
+  const toggleFolds = () => folds.update(toggle);
 
   function onKeyDown(e) {
     switch (e.code) {
-    case 'Digit1':
-      renderFlags.update(flags => {
-        flags.faces = !flags.faces;
-        return flags;
-      });
-      break;
-    case 'Digit2':
-      renderFlags.update(flags => {
-        flags.edges = !flags.edges;
-        return flags;
-      });
-      break;
-    case 'Digit3':
-      renderFlags.update(flags => {
-        flags.seams = !flags.seams;
-        return flags;
-      });
-      break;
-    case 'Digit4':
-      renderFlags.update(flags => {
-        flags.bounds = !flags.bounds;
-        return flags;
-      });
-      break;
-    case 'Digit5':
-      renderFlags.update(flags => {
-        flags.gaps = !flags.gaps;
-        return flags;
-      });
-      break;
-    case 'Digit6':
-      renderFlags.update(flags => {
-        flags.folds = !flags.folds;
-        return flags;
-      });
-      break;
-    }
-  }
-  */
-
-  import { faces, edges, seams, bounds, gaps, folds } from '../stores.js';
-
-  function onKeyDown(e) {
-    switch (e.code) {
-      case 'Digit1': faces.update(v => !v); break;
-      case 'Digit2': edges.update(v => !v); break;
-      case 'Digit3': seams.update(v => !v); break;
-      case 'Digit4': bounds.update(v => !v); break;
-      case 'Digit5': gaps.update(v => !v); break;
-      case 'Digit6': folds.update(v => !v); break;
+      case 'Digit1': toggleFaces(); break;
+      case 'Digit2': toggleEdges(); break;
+      case 'Digit3': toggleSeams(); break;
+      case 'Digit4': toggleBounds(); break;
+      case 'Digit5': toggleGaps(); break;
+      case 'Digit6': toggleFolds(); break;
     }
   }
 </script>
 
 <div class="app">
   <div class="nav">
-    <TreeView children={folders} />
+    <TreeView children={folders} selected={level} />
   </div>
   <div class="main">
     <ul class="toolbar">
       <li>
-        <ToolButton title="Toggle faces" icon="faces" key="1" active={$faces} onclick={() => faces.update(v => !v)} />
+        <ToolButton
+          title="Toggle faces"
+          icon="faces"
+          key="1"
+          active={$faces}
+          onclick={toggleFaces}
+        />
       </li>
       <li>
-        <ToolButton title="Toggle edges" icon="edges" key="2" active={$edges} onclick={() => edges.update(v => !v)} />
+        <ToolButton
+          title="Toggle edges"
+          icon="edges"
+          key="2"
+          active={$edges}
+          onclick={toggleEdges}
+        />
       </li>
       <li>
-        <ToolButton title="Toggle seams" icon="seams" key="3" active={$seams} onclick={() => seams.update(v => !v)} />
+        <ToolButton
+          title="Toggle seams"
+          icon="seams"
+          key="3"
+          active={$seams}
+          onclick={toggleSeams}
+        />
       </li>
       <li>
-        <ToolButton title="Toggle boundary seams" icon="bounds" key="4" active={$bounds} onclick={() => bounds.update(v => !v)} />
+        <ToolButton
+          title="Toggle boundary seams"
+          icon="bounds"
+          key="4"
+          active={$bounds}
+          onclick={toggleBounds}
+        />
       </li>
       <li>
-        <ToolButton title="Toggle misaligned seams" icon="gaps" key="5" active={$gaps} onclick={() => gaps.update(v => !v)} />
+        <ToolButton
+          title="Toggle misaligned seams"
+          icon="gaps"
+          key="5"
+          active={$gaps}
+          onclick={toggleGaps}
+        />
       </li>
       <li>
-        <ToolButton title="Toggle folded edges" icon="folds" key="6" active={$folds} onclick={() => folds.update(v => !v)} />
+        <ToolButton
+          title="Toggle folded edges"
+          icon="folds"
+          key="6"
+          active={$folds}
+          onclick={toggleFolds}
+        />
       </li>
     </ul>
   </div>
@@ -118,17 +109,16 @@
     height: 100%;
   }
   .nav {
-    /*background-color: #303236;*/
+    /* background-color: #303236; */
+    flex-shrink: 0;
     box-sizing: content-box;
     width: 22rem;
-    flex-shrink: 0;
     padding: 0.5rem 0;
     border-right: 1px solid #494c50;
     overflow: auto;
-    /*scrollbar-color: #303236 transparent;*/
+    /* scrollbar-color: #303236 transparent; */
   }
-  /*
-  .nav::-webkit-scrollbar {
+  /* .nav::-webkit-scrollbar {
     width: 0.5rem;
     height: 0.5rem;
   }
@@ -139,8 +129,7 @@
   .nav::-webkit-scrollbar-thumb {
     background-color: #404248;
     border-radius: 0.25rem;
-  }
-  */
+  } */
   .main {
     flex-grow: 1;
   }
