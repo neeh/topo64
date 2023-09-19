@@ -47,8 +47,7 @@ function init() {
   scene = new Scene();
   scene.background = new Color(0x202124);
 
-  camera = new PerspectiveCamera(50, 1, 4, 80000);
-  camera.position.set(4000, 2000, 0);
+  camera = new PerspectiveCamera(50, 1, 1, 50000);
 
   renderer = new WebGLRenderer({
     // logarithmicDepthBuffer: true,
@@ -68,6 +67,12 @@ function init() {
 
   // Three rendering
   renderObjs = createRenderObjects(geometryData);
+  renderObjs.triangles.geometry.computeBoundingSphere();
+  const { boundingSphere } = renderObjs.triangles.geometry;
+  camera.position.set(-1, 2, 3).setLength(boundingSphere.radius * 2.5).add(boundingSphere.center);
+  controls.target.copy(boundingSphere.center);
+  controls.update();
+
   scene.add(renderObjs.group);
 
   document.addEventListener('keydown', onKeyDown)
