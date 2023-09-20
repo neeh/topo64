@@ -75,7 +75,7 @@ function init() {
 
   scene.add(renderObjs.group);
 
-  document.addEventListener('keydown', onKeyDown)
+  document.addEventListener('keydown', onKeyDown);
   window.addEventListener('resize', onResize);
   onResize();
 
