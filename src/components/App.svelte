@@ -1,8 +1,7 @@
 <script>
-  import { beforeUpdate, afterUpdate } from 'svelte';
+  import { onMount, tick } from 'svelte';
   import levels from '../levels/index.js';
-  import * as stores from '../stores.js';
-  import { browse, level } from '../stores.js';
+  import { viewportSize, browse, level } from '../stores.js';
   import TreeView from './TreeView.svelte';
   import Canvas from './Canvas.svelte';
   import Toolbar from './Toolbar.svelte';
@@ -19,13 +18,34 @@
   }));
 
   level.update(() => levels.lll[0]);
+
+  let viewport;
+
+  function onResize() {
+    if (!viewport) return;
+
+    const width = viewport.clientWidth;
+    const height = viewport.clientHeight;
+
+    viewportSize.set([width, height]);
+
+    // console.log('resized to', width, '×', height);
+  }
+
+  browse.subscribe(() => {
+    tick().then(onResize);
+  });
+
+  onMount(() => {
+    onResize();
+  });
 </script>
 
 <div class="app">
   <div class="nav" style={'display: ' + ($browse ? 'block' : 'none')}>
     <TreeView children={folders} selected={level} />
   </div>
-  <div class="main">
+  <div bind:this={viewport} class="viewport">
     <Canvas />
     <Toolbar />
   </div>
@@ -58,7 +78,7 @@
     background-color: #404248;
     border-radius: 0.25rem;
   } */
-  .main {
+  .viewport {
     flex-grow: 1;
     min-width: 0;
     min-height: 0;
@@ -66,3 +86,5 @@
     position: relative;
   }
 </style>
+
+<svelte:window on:resize={onResize} />

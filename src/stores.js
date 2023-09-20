@@ -1,5 +1,6 @@
 import { writable } from 'svelte/store';
 
+export const viewportSize = writable([300, 150]);
 export const browse = writable(true);
 export const level = writable(null);
 export const faces = writable(true);
