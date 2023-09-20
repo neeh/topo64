@@ -11,6 +11,9 @@
   <symbol id="arrow-down" viewBox="0 0 20 20">
     <path d="M6 8h8l-4 5z"/>
   </symbol>
+  <symbol id="browse" viewBox="0 0 40 40">
+    <path d="M9 10c-.5 0-1 .5-1 1v15.5c0 .823.678 1.5 1.5 1.5h21c.822 0 1.5-.677 1.5-1.5v-13c0-.822-.678-1.5-1.5-1.5H18l-2-2zm.5 3h21c.286 0 .5.214.5.5v13c0 .286-.214.5-.5.5h-21a.488.488 0 0 1-.5-.5v-13c0-.286.215-.5.5-.5z"/>
+  </symbol>
   <symbol id="faces" viewBox="0 0 40 40">
     <path d="M15.25 11l-5 4h14l5-4h-14zm14.75.75l-5 4v14l5-4v-14zM10 16v14h14V16H10z"/>
   </symbol>

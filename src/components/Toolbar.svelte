@@ -1,8 +1,9 @@
 <script>
-  import { faces, edges, seams, bounds, gaps, folds, xray } from '../stores.js';
+  import { browse, faces, edges, seams, bounds, gaps, folds, xray } from '../stores.js';
   import ToolbarButton from './ToolbarButton.svelte';
 
   const toggle = value => !value;
+  const toggleBrowse = () => browse.update(toggle);
   const toggleFaces = () => faces.update(toggle);
   const toggleEdges = () => edges.update(toggle);
   const toggleSeams = () => seams.update(toggle);
@@ -13,6 +14,7 @@
 
   function onKeyDown(e) {
     switch (e.code) {
+      case 'KeyB': toggleBrowse(); break;
       case 'Digit1': toggleFaces(); break;
       case 'Digit2': toggleEdges(); break;
       case 'Digit3': toggleSeams(); break;
@@ -25,6 +27,16 @@
 </script>
 
 <div class="toolbar">
+  <div class="slot">
+    <ToolbarButton
+      title="Browse files"
+      icon="browse"
+      key="B"
+      active={$browse}
+      onclick={toggleBrowse}
+    />
+  </div>
+  <div class="separator" />
   <div class="slot">
     <ToolbarButton
       title="Toggle faces"
@@ -99,7 +111,7 @@
     left: 0.75rem;
   }
   .separator {
-    width: 2.5rem;
+    width: 1.5rem;
   }
 </style>
 

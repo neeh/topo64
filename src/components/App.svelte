@@ -2,7 +2,7 @@
   import { beforeUpdate, afterUpdate } from 'svelte';
   import levels from '../levels/index.js';
   import * as stores from '../stores.js';
-  import { level } from '../stores.js';
+  import { browse, level } from '../stores.js';
   import TreeView from './TreeView.svelte';
   import Canvas from './Canvas.svelte';
   import Toolbar from './Toolbar.svelte';
@@ -22,7 +22,7 @@
 </script>
 
 <div class="app">
-  <div class="nav">
+  <div class="nav" style={'display: ' + ($browse ? 'block' : 'none')}>
     <TreeView children={folders} selected={level} />
   </div>
   <div class="main">
