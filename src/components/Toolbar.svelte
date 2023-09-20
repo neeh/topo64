@@ -1,4 +1,5 @@
 <script>
+  import { resetCamera } from '../render.js';
   import { browse, faces, edges, seams, bounds, gaps, folds, xray } from '../stores.js';
   import ToolbarButton from './ToolbarButton.svelte';
 
@@ -22,6 +23,7 @@
       case 'Digit5': toggleGaps(); break;
       case 'Digit6': toggleFolds(); break;
       case 'KeyE': toggleXray(); break;
+      case 'KeyR': resetCamera(); break;
     }
   }
 </script>
@@ -99,6 +101,14 @@
       key="E"
       active={$xray}
       onclick={toggleXray}
+    />
+  </div>
+  <div class="slot">
+    <ToolbarButton
+      title="Reset camera pose"
+      icon="camera-home"
+      key="R"
+      onclick={resetCamera}
     />
   </div>
 </div>
