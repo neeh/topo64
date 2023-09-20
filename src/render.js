@@ -3,7 +3,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { createModel } from './commands.js';
 import { GeometryData } from './geometry-data.js';
 import { createRenderObjects } from './rendering.js';
-import { level, xray } from './stores.js';
+import { level, faces, edges, seams, bounds, gaps, folds, xray } from './stores.js';
 
 let scene, camera, renderer, controls;
 let cube;
@@ -85,6 +85,12 @@ export function init(canvas) {
   resetCamera();
 
   level.subscribe(setModelCommands);
+  faces.subscribe(enabled => curRenderObjs && (curRenderObjs.triangles.visible = enabled));
+  edges.subscribe(enabled => curRenderObjs && (curRenderObjs.edges.visible = enabled));
+  seams.subscribe(enabled => curRenderObjs && (curRenderObjs.seams.visible = enabled));
+  bounds.subscribe(enabled => curRenderObjs && (curRenderObjs.boundary.visible = enabled));
+  gaps.subscribe(enabled => curRenderObjs && (curRenderObjs.misaligned.visible = enabled));
+  folds.subscribe(enabled => curRenderObjs && (curRenderObjs.folds.visible = enabled));
   xray.subscribe(enabled => setRenderMode(enabled ? RenderMode.XRAY : RenderMode.SOLID));
 }
 
