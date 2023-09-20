@@ -29,4 +29,7 @@
   <symbol id="folds" viewBox="0 0 40 40">
     <path d="M13.177 6.78L6.863 29.931l18.982 2.109.13-.383L33.193 10H19.617zm.645 1.44l11.256 22.73L8.137 29.07zM19.638 11h12.169l-6.654 19.959z"/>
   </symbol>
+  <symbol id="xray" viewBox="0 0 40 40">
+    <path d="M14 8v6H8v18h18v-6h6V8zm1 1h16v16h-5V14H15zm-6 6h16v16H9zm5 1v2h1v-2zm0 4v2h1v-2zm0 4v2h2v-1h-1v-1zm4 1v1h2v-1zm4 0v1h2v-1z"/>
+  </symbol>
 </svg>

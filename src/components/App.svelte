@@ -2,10 +2,10 @@
   import { beforeUpdate, afterUpdate } from 'svelte';
   import levels from '../levels/index.js';
   import * as stores from '../stores.js';
-  import { faces, edges, seams, bounds, gaps, folds, level } from '../stores.js';
-  import ToolButton from './ToolButton.svelte';
+  import { level } from '../stores.js';
   import TreeView from './TreeView.svelte';
   import Canvas from './Canvas.svelte';
+  import Toolbar from './Toolbar.svelte';
 
   const folders = Object.entries(levels).map(entry => ({
     label: entry[0],
@@ -19,25 +19,6 @@
   }));
 
   level.update(() => levels.lll[0]);
-
-  const toggle = value => !value;
-  const toggleFaces = () => faces.update(toggle);
-  const toggleEdges = () => edges.update(toggle);
-  const toggleSeams = () => seams.update(toggle);
-  const toggleBounds = () => bounds.update(toggle);
-  const toggleGaps = () => gaps.update(toggle);
-  const toggleFolds = () => folds.update(toggle);
-
-  function onKeyDown(e) {
-    switch (e.code) {
-      case 'Digit1': toggleFaces(); break;
-      case 'Digit2': toggleEdges(); break;
-      case 'Digit3': toggleSeams(); break;
-      case 'Digit4': toggleBounds(); break;
-      case 'Digit5': toggleGaps(); break;
-      case 'Digit6': toggleFolds(); break;
-    }
-  }
 </script>
 
 <div class="app">
@@ -46,62 +27,7 @@
   </div>
   <div class="main">
     <Canvas />
-    <ul class="toolbar">
-      <li>
-        <ToolButton
-          title="Toggle faces"
-          icon="faces"
-          key="1"
-          active={$faces}
-          onclick={toggleFaces}
-        />
-      </li>
-      <li>
-        <ToolButton
-          title="Toggle edges"
-          icon="edges"
-          key="2"
-          active={$edges}
-          onclick={toggleEdges}
-        />
-      </li>
-      <li>
-        <ToolButton
-          title="Toggle seams"
-          icon="seams"
-          key="3"
-          active={$seams}
-          onclick={toggleSeams}
-        />
-      </li>
-      <li>
-        <ToolButton
-          title="Toggle boundary seams"
-          icon="bounds"
-          key="4"
-          active={$bounds}
-          onclick={toggleBounds}
-        />
-      </li>
-      <li>
-        <ToolButton
-          title="Toggle misaligned seams"
-          icon="gaps"
-          key="5"
-          active={$gaps}
-          onclick={toggleGaps}
-        />
-      </li>
-      <li>
-        <ToolButton
-          title="Toggle folded edges"
-          icon="folds"
-          key="6"
-          active={$folds}
-          onclick={toggleFolds}
-        />
-      </li>
-    </ul>
+    <Toolbar />
   </div>
 </div>
 
@@ -139,17 +65,4 @@
     overflow: hidden;
     position: relative;
   }
-  .toolbar {
-    padding: 0;
-    margin: 0;
-    position: absolute;
-    top: 0.75rem;
-    left: 0.75rem;
-  }
-  .toolbar li {
-    display: inline-block;
-    list-style-type: none;
-  }
 </style>
-
-<svelte:window on:keydown={onKeyDown} />
