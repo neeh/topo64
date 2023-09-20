@@ -91,7 +91,7 @@ export function createRenderObjects(geometryData) {
     indEdges.push(edge.i0, edge.i1);
   }
 
-  const triangles = createTriangleMesh(vertices, indices, '#18181a', '#060608');
+  const triangles = createTriangleMesh(vertices, indices, '#060608', '#060608');
   const edges = createLineMesh(vertices, indEdges, '#36373d', '#0d0d10');
   const seams = createLineMesh(vertices, indSeams, '#A05000', '#804000', true);
   const folds = createLineMesh(vertices, indFolds, 'red', 'red', true);
