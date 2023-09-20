@@ -1,5 +1,5 @@
 <script>
-  import { resetCamera } from '../render.js';
+  import { resetCamera, downloadObj } from '../render.js';
   import { browse, faces, edges, seams, bounds, gaps, folds, xray } from '../stores.js';
   import ToolbarButton from './ToolbarButton.svelte';
 
@@ -24,6 +24,7 @@
       case 'Digit6': toggleFolds(); break;
       case 'KeyE': toggleXray(); break;
       case 'KeyR': resetCamera(); break;
+      case 'KeyP': downloadObj(); break;
     }
   }
 </script>
@@ -36,6 +37,14 @@
       key="B"
       active={$browse}
       onclick={toggleBrowse}
+    />
+  </div>
+  <div class="slot">
+    <ToolbarButton
+      title="Download model as .obj"
+      icon="download"
+      key="P"
+      onclick={downloadObj}
     />
   </div>
   <div class="separator" />

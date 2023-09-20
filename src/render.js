@@ -139,6 +139,11 @@ export function resetCamera() {
   controls.update();
 }
 
+export function downloadObj() {
+  if (!curModel) return;
+  curModel.downloadObj();
+}
+
 export function setSize(width, height) {
   if (camera) {
     camera.aspect = width / height;
