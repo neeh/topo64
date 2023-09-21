@@ -119,7 +119,7 @@ export function setModelCommands(modelCmds) {
     curModel = createModel(curModelCmds);
 
     const geometryData = new GeometryData(curModel.createGeometry());
-    geometryData.findMisalignedSeamSections2();
+    geometryData.findMisalignedSeamSections();
     geometryData.findFoldedEdges();
 
     curRenderObjs = createRenderObjects(geometryData);

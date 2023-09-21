@@ -82,6 +82,10 @@ export class GeometryData {
 
     const degenerate = Math.abs(normal.lengthSq() - 1) > 0.01;
     this.faceIsDegenerate.push(degenerate);
+
+    // if (degenerate) {
+    //   console.log('triangle ' + (this.faces.length - 1) + ' is degenerate');
+    // }
   }
 
   _computeEdges() {
@@ -110,53 +114,6 @@ export class GeometryData {
   }
 
   findMisalignedSeamSections() {
-    for (const edge of this.edges) {
-      if (!edge.isSeam) continue;
-
-      edge.clearSections();
-      const { p0, p1, faceId, delta } = edge;
-
-      // NOTE: Bruteforce for now
-      // UPDATE: It turns out bruteforce is not an issue for SM64 models
-      for (let i = 0; i < this.faces.length; ++i) {
-        // Do not test the edge against its own face
-        if (i === faceId) continue;
-
-        const plane = this.facePlanes[i];
-        const edgePlanes = this.faceEdgePlanes[i];
-
-        const d0 = plane.distanceToPoint(p0);
-        const d1 = plane.distanceToPoint(p1);
-
-        if (Math.abs(d0) < EPS && Math.abs(d1) < EPS) {
-          let min = 0, max = 1;
-          for (let j = 0; j < edgePlanes.length && min < max; ++j) {
-            const edgePlane = edgePlanes[j];
-            const denom = delta.dot(edgePlane.normal);
-            if (denom === 0) {
-              // seam is parallel to side
-              if (edgePlane.distanceToPoint(p0) > EPS) {
-                // seam is outside the face, early out
-                max = min;
-              }
-            } else {
-              const t = -edgePlane.distanceToPoint(p0) / denom;
-              if (denom < 0) {
-                // seam points towards face, use max constraint
-                min = Math.max(min, t);
-              } else {
-                // seam points away from the face, use min constraint
-                max = Math.min(max, t);
-              }
-            }
-          }
-          edge.markAlignedSection(min, max);
-        }
-      }
-    }
-  }
-
-  findMisalignedSeamSections2() {
     for (const edge of this.edges) {
       if (!edge.isSeam) continue;
 
