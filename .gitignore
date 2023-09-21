@@ -1,4 +1,5 @@
 .cache/
+.dev/
 node_modules/
 build/
 public/bundle.js

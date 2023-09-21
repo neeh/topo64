@@ -5,8 +5,8 @@
   "type": "module",
   "main": "src/index.js",
   "scripts": {
-    "dev": "rollup -c -w -m",
-    "dev:open": "rollup -c -w -m --environment OPEN",
+    "dev": "rollup -c -w -m --environment SERVE",
+    "dev:open": "rollup -c -w -m --environment SERVE,OPEN",
     "build": "rollup -c --environment PROD"
   },
   "keywords": [],
