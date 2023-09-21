@@ -35,7 +35,7 @@
 
   function onMouseDown(e) {
     xOnDown = e.clientX;
-    navWidthOnDown = nav.clientWidth;
+    navWidthOnDown = nav.offsetWidth;
     resizing.set(true);
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
@@ -59,7 +59,7 @@
 
   onMount(() => {
     onResize();
-    navWidth.set(nav.clientWidth);
+    navWidth.set(nav.offsetWidth);
   });
 
   $: navStyle = `display: ${$browse ? 'block' : 'none'}; width: ${$navWidth >= 0 ? $navWidth + 'px' : '20rem'};`;
