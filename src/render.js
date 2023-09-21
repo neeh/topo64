@@ -21,6 +21,7 @@ let renderMode = RenderMode.SOLID;
 const lastCameraPos = new Vector3();
 const lastTargetPos = new Vector3();
 let lastCameraAspect = 0;
+let lastCameraLayersMask = 0;
 let lastRenderMode = renderMode;
 let lastModelCmds = null;
 
@@ -91,12 +92,13 @@ export function init(canvas) {
   resetCamera();
 
   level.subscribe(setModelCommands);
-  faces.subscribe(enabled => curRenderObjs && (curRenderObjs.triangles.visible = enabled));
-  edges.subscribe(enabled => curRenderObjs && (curRenderObjs.edges.visible = enabled));
-  seams.subscribe(enabled => curRenderObjs && (curRenderObjs.seams.visible = enabled));
-  bounds.subscribe(enabled => curRenderObjs && (curRenderObjs.boundary.visible = enabled));
-  gaps.subscribe(enabled => curRenderObjs && (curRenderObjs.misaligned.visible = enabled));
-  folds.subscribe(enabled => curRenderObjs && (curRenderObjs.folds.visible = enabled));
+
+  const layerStores = [faces, edges, seams, bounds, gaps, folds];
+  for (let i = 0; i < layerStores.length; ++i) {
+    const layer = i + 1;
+    layerStores[i].subscribe(enabled => enabled ? camera.layers.enable(layer) : camera.layers.disable(layer));
+  }
+
   xray.subscribe(enabled => setRenderMode(enabled ? RenderMode.XRAY : RenderMode.SOLID));
 }
 
@@ -184,6 +186,7 @@ function animate(time) {
     camera.position.equals(lastCameraPos) &&
     controls.target.equals(lastTargetPos) &&
     camera.aspect === lastCameraAspect &&
+    camera.layers.mask === lastCameraLayersMask &&
     renderMode === lastRenderMode &&
     curModelCmds === lastModelCmds
   );
@@ -193,6 +196,7 @@ function animate(time) {
     lastCameraPos.copy(camera.position);
     lastTargetPos.copy(controls.target);
     lastCameraAspect = camera.aspect;
+    lastCameraLayersMask = camera.layers.mask;
     lastRenderMode = renderMode;
     lastModelCmds = curModelCmds;
   }

@@ -2,7 +2,7 @@ import { Vector3, Float32BufferAttribute, Uint16BufferAttribute, BufferGeometry,
 
 const tmp_ = new Vector3();
 
-function createTriangleMesh(vertices, indices, color, xrayColor = color, forceSolid = false) {
+function createTriangleMesh(vertices, indices, color, xrayColor = color, forceSolid = false, layer = 0) {
   const geometry = new BufferGeometry();
   geometry.setAttribute('position', new Float32BufferAttribute(vertices, 3));
   if (indices) {
@@ -28,12 +28,13 @@ function createTriangleMesh(vertices, indices, color, xrayColor = color, forceSo
   });
 
   const mesh = new Mesh(geometry, material)
+  mesh.layers.set(layer);
   mesh.userData.materials = [material, xrayMaterial];
 
   return mesh;
 }
 
-function createLineMesh(vertices, indices, color, xrayColor = color, forceSolid = false) {
+function createLineMesh(vertices, indices, color, xrayColor = color, forceSolid = false, layer = 0) {
   const geometry = new BufferGeometry();
   geometry.setAttribute('position', new Float32BufferAttribute(vertices, 3));
   if (indices) {
@@ -54,12 +55,13 @@ function createLineMesh(vertices, indices, color, xrayColor = color, forceSolid 
   });
 
   const line = new LineSegments(geometry, material);
+  line.layers.set(layer);
   line.userData.materials = [material, xrayMaterial];
 
   return line;
 }
 
-function createEdgeSectionMesh(edges, sectionType = 0, color, xrayColor, forceBlending) {
+function createEdgeSectionMesh(edges, sectionType = 0, color, xrayColor, forceSolid, layer) {
   const vertices = [];
 
   for (const edge of edges) {
@@ -71,7 +73,7 @@ function createEdgeSectionMesh(edges, sectionType = 0, color, xrayColor, forceBl
       tmp_.copy(p0).addScaledVector(delta, t[i]).toArray(vertices, vertices.length);
     }
   }
-  return createLineMesh(vertices, null, color, xrayColor, forceBlending);
+  return createLineMesh(vertices, null, color, xrayColor, forceSolid, layer);
 }
 
 export function createRenderObjects(geometryData) {
@@ -91,12 +93,12 @@ export function createRenderObjects(geometryData) {
     indEdges.push(edge.i0, edge.i1);
   }
 
-  const triangles = createTriangleMesh(vertices, indices, '#060608', '#060608');
-  const edges = createLineMesh(vertices, indEdges, '#36373d', '#0d0d10');
-  const seams = createLineMesh(vertices, indSeams, '#A05000', '#804000', true);
-  const folds = createLineMesh(vertices, indFolds, 'red', 'red', true);
-  const boundary = createEdgeSectionMesh(geometryData.edges, 1, '#008080', '#007070', true);
-  const misaligned = createEdgeSectionMesh(geometryData.edges, 0, 'aqua', 'aqua', true);
+  const triangles = createTriangleMesh(vertices, indices, '#060608', '#060608', false, 1);
+  const edges = createLineMesh(vertices, indEdges, '#36373d', '#0d0d10', false, 2);
+  const seams = createLineMesh(vertices, indSeams, '#A05000', '#804000', true, 3);
+  const boundary = createEdgeSectionMesh(geometryData.edges, 1, '#008080', '#007070', true, 4);
+  const misaligned = createEdgeSectionMesh(geometryData.edges, 0, 'aqua', 'aqua', true, 5);
+  const folds = createLineMesh(vertices, indFolds, 'red', 'red', true, 6);
 
   const group = new Group();
   group.add(triangles, edges, seams, folds, boundary, misaligned);
