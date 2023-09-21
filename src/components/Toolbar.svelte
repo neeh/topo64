@@ -32,7 +32,7 @@
 <div class="toolbar">
   <div class="slot">
     <ToolbarButton
-      title="Browse files"
+      title={($browse ? 'Close' : 'Open') + ' file browser'}
       icon="browse"
       key="B"
       active={$browse}
