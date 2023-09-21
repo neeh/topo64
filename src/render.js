@@ -1,9 +1,14 @@
-import { Scene, Color, PerspectiveCamera, WebGLRenderer, BoxGeometry, MeshBasicMaterial, Mesh } from 'three';
+import { Vector3, Scene, Color, PerspectiveCamera, WebGLRenderer, BoxGeometry, MeshBasicMaterial, Mesh } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { createModel } from './commands.js';
 import { GeometryData } from './geometry-data.js';
 import { createRenderObjects } from './rendering.js';
 import { level, faces, edges, seams, bounds, gaps, folds, xray } from './stores.js';
+
+const RenderMode = {
+  SOLID: 0,
+  XRAY: 1
+};
 
 let scene, camera, renderer, controls;
 let cube;
@@ -11,17 +16,18 @@ let cube;
 let curModelCmds = null;
 let curModel = null;
 let curRenderObjs = null;
+let renderMode = RenderMode.SOLID;
+
+const lastCameraPos = new Vector3();
+const lastTargetPos = new Vector3();
+let lastCameraAspect = 0;
+let lastRenderMode = renderMode;
+let lastModelCmds = null;
 
 let frame;
 let lastTime = 0;
 let globalTime = 0;
 let playbackSpeed = 1;
-
-const RenderMode = {
-  SOLID: 0,
-  XRAY: 1
-};
-let renderMode = RenderMode.SOLID;
 
 export function setRenderMode(mode) {
   if (renderMode === mode) return;
@@ -65,7 +71,7 @@ export function init(canvas) {
     // logarithmicDepthBuffer: true
   });
   renderer.sortObjects = false;
-  renderer.setPixelRatio(1);
+  renderer.setPixelRatio(window.devicePixelRatio);
 
   controls = new OrbitControls(camera, renderer.domElement);
 
@@ -174,5 +180,20 @@ function animate(time) {
   // cube.rotation.x += dt * 0.4831;
   // cube.rotation.y += dt * 0.2197;
 
-  renderer.render(scene, camera);
+  const skipRender = (
+    camera.position.equals(lastCameraPos) &&
+    controls.target.equals(lastTargetPos) &&
+    camera.aspect === lastCameraAspect &&
+    renderMode === lastRenderMode &&
+    curModelCmds === lastModelCmds
+  );
+  if (!skipRender) {
+    renderer.render(scene, camera);
+
+    lastCameraPos.copy(camera.position);
+    lastTargetPos.copy(controls.target);
+    lastCameraAspect = camera.aspect;
+    lastRenderMode = renderMode;
+    lastModelCmds = curModelCmds;
+  }
 }
