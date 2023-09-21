@@ -1,4 +1,4 @@
-# sm64-seam-finder
+# topo64
 
 A small project to help the SM64 speed running community to find topology errors in SM64 levels.
 
@@ -6,3 +6,5 @@ A small project to help the SM64 speed running community to find topology errors
 
 This project uses a JavaScript port of the Corner Table class from Google's Draco library (Apache 2.0 license)
 https://github.com/google/draco/blob/master/src/draco/mesh/corner_table.h
+
+Collision models are property of Nintendo.
