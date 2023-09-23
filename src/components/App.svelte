@@ -17,7 +17,7 @@
     }))
   }));
 
-  level.update(() => levels.lll[0]);
+  level.update(() => levels.hmc[0]);
 
   let nav;
   let viewport;
