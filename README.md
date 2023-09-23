@@ -6,7 +6,7 @@ A small project to help the Super Mario 64 TAS community to find topology errors
 
 At the moment, **the tool focuses solely on topology errors** and ignores any physics or gameplay rules (no distinction between floor/wall/ceiling, no integer collision detection). The gaps reported may not always be useful from a gameplay perspective.
 
-Gaps should be visible with the default camera settings if the camera is zoomed enough. Models can be downloaded as .obj if you need to make a more in-depth analysis of the gap.
+Gaps should be visible with the default camera settings if the camera is zoomed enough. Models can be downloaded as .obj if you need to make a more in-depth analysis of the gap. If are importing the .obj on a 3D editing software, remember to bump up the camera planes to somewhere around [0.1, 50000] because these models use integers.
 
 ## Process
 
@@ -31,6 +31,10 @@ On the above image, the 2 red edges belong to a triangle that was added to fill 
 An extra check for these "fold edges" was added, so these edges will show up in red in any level.
 
 The tool also reported some suspicious gaps in VCUTM, SL, BOB, WDW, SL, or even inside the castle but most of these gaps don't fall on the integer space, so they might not be usable in game.
+
+There's this gap at the top of SL that lets you through the Snowman's head when standing at (-18, 4352, 950).
+
+![Misaligned edge in SL](./docs/images/sl-0.png)
 
 ## Color code
 
