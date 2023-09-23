@@ -267,6 +267,7 @@ const specialObjNames = [
   'special_metal_door_warp',
   'special_mine',
   'special_null_start',
+  'special_palm_tree',
   'special_snow_tree',
   'special_spiky_tree',
   'special_wooden_door',
