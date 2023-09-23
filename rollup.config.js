@@ -16,7 +16,7 @@ const {
   OPEN = false
 } = process.env;
 
-const destination = path.join(__dirname, PROD ? 'dist' : '.dev');
+const destination = path.join(__dirname, 'dist');
 
 function clean() {
   let first = true;
