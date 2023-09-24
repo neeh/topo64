@@ -6,13 +6,13 @@ A small project to help the Super Mario 64 TAS community to find topology errors
 
 At the moment, **the tool focuses solely on topology errors** and ignores any physics or gameplay rules (no distinction between floor/wall/ceiling, no integer collision detection). The gaps reported may not always be useful from a gameplay perspective.
 
-Gaps should be visible with the default camera settings if the camera is zoomed enough. Models can be downloaded as .obj if you need to make a more in-depth analysis of the gap. If you are importing the .obj on a 3D editing software, remember to bump up the camera planes to somewhere around [0.1, 50000] because these models use integers.
+Gaps should be visible with the default camera settings if the camera is zoomed enough. Models can be downloaded as .obj if you need to make a more in-depth analysis of the gap. If you are importing the .obj in a 3D editing software, remember to bump up the camera planes to somewhere around [0.1, 50000] because these models use integers.
 
 ## Process
 
 The idea is to detect the tiny gaps caused by misaligned faces. These gaps can be observed around the edges of the polygons, or more precisely, around the "seam" edges of the geometry. We call seams the edges that are connected to less than 2 faces.
 
-For each seam edge, we identity which section of the edge is aligned to another face (or edge of a face) in its neighborhood. Out of the remaining misaligned sections, we trying to figure out whether the misalignment is intentional by keeping track of the sections that are almost aligned.
+For each seam edge, we identity which section of the edge is aligned to another face (or edge of a face) in its neighborhood. Out of the remaining misaligned sections, we try to figure out whether the misalignment is intentional by keeping track of the sections that are almost aligned.
 
 ## Results
 

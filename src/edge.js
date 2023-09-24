@@ -25,8 +25,6 @@ export class Edge {
     this.isSeam = false;
     this.isFold = false;
 
-    // but now we have a problem:
-
     this.alignedSections = new IntervalSet();
     this.misalignedSections = new IntervalSet();
     this.boundarySections = new IntervalSet();

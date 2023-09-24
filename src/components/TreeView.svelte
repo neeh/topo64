@@ -12,7 +12,9 @@
 
   function onItemClick(item, e) {
     selected.update(curData => item.data !== curData ? item.data : null);
-    e?.currentTarget?.blur();
+    if (e && e.currentTarget) {
+      e.currentTarget.blur();
+    }
   }
 </script>
 
